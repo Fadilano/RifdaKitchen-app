@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "328137252352",
+    "firebase_url": "https://rifda-kitchen-default-rtdb.firebaseio.com",
+    "project_id": "rifda-kitchen",
+    "storage_bucket": "rifda-kitchen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328137252352:android:04e5bc4ff06d38b35382e5",
+        "android_client_info": {
+          "package_name": "com.submission.rifda_kitchen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328137252352-jsh85a2d50pjps2ha4klmbg21sfs2nt6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.submission.rifda_kitchen",
+            "certificate_hash": "696c57e7f59ed1b321b4b35009a742eee380ea23"
+          }
+        },
+        {
+          "client_id": "328137252352-8fr75snmt3qh75sflinu4veme5l5f9lb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmG2UvZ3hMdwQWCxVh3Pn2iPz0MW1clCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328137252352-8fr75snmt3qh75sflinu4veme5l5f9lb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.ProfileFragment">
+
+    <TextView
+        android:id="@+id/pagetitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Profile"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/currentUserImage"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            tools:src="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/currentUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_profile"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            tools:text="Fadilano Abraham" />
+
+        <TextView
+            android:id="@+id/currentUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textStyle="italic"
+            android:background="@drawable/bg_profile"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            tools:text="fadilanoa@gmail.com" />
+
+        <Button
+            android:id="@+id/btnSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="8dp"
+            android:text="Sign Out" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
