@@ -2,7 +2,6 @@ package com.submission.rifda_kitchen.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.rifda_kitchen.Helper.formatPrice
@@ -16,7 +15,8 @@ class ProductAdapter(
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
 
-    inner class ProductViewHolder(private val binding: ProductItemListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProductViewHolder(private val binding: ProductItemListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductModel) {
             binding.apply {
                 tvProductName.text = product.name
@@ -25,13 +25,15 @@ class ProductAdapter(
                     .load(R.drawable.sample)
                     .into(ivProduct)
             }
-                binding.root.setOnClickListener {
-                    onItemClick(product)
-                }
+            binding.btnToDetail.setOnClickListener {
+                onItemClick(product)
+            }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = ProductItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ProductItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
