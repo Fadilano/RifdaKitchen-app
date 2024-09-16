@@ -31,24 +31,23 @@ class CartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentCartBinding.inflate(inflater, container, false)
 
         showCartItems()
+
         cartViewmodel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
+
         cartViewmodel.getTotalPrice()
         cartViewmodel.totalPrices.observe(viewLifecycleOwner) {
             binding.tvTotal.formatPrice(it)
         }
 
-
         return binding.root
     }
 
     private fun showCartItems() {
-
         cartAdapter = CartAdapter(emptyList())
         binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProduct.adapter = cartAdapter
@@ -56,7 +55,6 @@ class CartFragment : Fragment() {
         cartViewmodel.cartItemList.observe(viewLifecycleOwner) { list ->
             cartAdapter.updateList(list)
         }
-
     }
 
     override fun onDestroyView() {

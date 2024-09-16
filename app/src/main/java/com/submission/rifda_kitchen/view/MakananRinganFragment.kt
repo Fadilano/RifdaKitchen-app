@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.ProductAdapter
+import com.submission.rifda_kitchen.databinding.FragmentMakananBeratBinding
 import com.submission.rifda_kitchen.databinding.FragmentMakananRinganBinding
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.repository.Repository
@@ -18,7 +19,8 @@ import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 class MakananRinganFragment : Fragment() {
 
-    private lateinit var binding: FragmentMakananRinganBinding
+    private var _binding: FragmentMakananRinganBinding? = null
+    private val binding get() = _binding!!
     private val repository = Repository()
     private lateinit var productAdapter: ProductAdapter
     private val productViewmodel: ProductViewmodel by viewModels { ViewmodelFactory(repository) }
@@ -28,31 +30,31 @@ class MakananRinganFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMakananRinganBinding.inflate(inflater, container, false)
+        _binding = FragmentMakananRinganBinding.inflate(inflater, container, false)
+
         showProducts()
+
         productViewmodel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
+
         return binding.root
     }
 
 
     private fun showProducts() {
         productAdapter = ProductAdapter(emptyList()) { product ->
-            // Create an Intent to launch DetailActivity
             val intent = Intent(requireContext(), DetailActivity::class.java).apply {
                 putExtra(
                     "MAKANANRINGAN_EXTRA",
                     product as MakananRinganModel
-                ) // Update with actual image resource
+                )
             }
             startActivity(intent)
         }
         binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProduct.adapter = productAdapter
-
         productViewmodel.fetchMakananRingan()
-
         productViewmodel.makananRinganList.observe(viewLifecycleOwner) { list ->
 
             productAdapter.updateList(list)

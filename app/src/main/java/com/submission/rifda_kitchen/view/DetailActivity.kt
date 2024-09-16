@@ -4,21 +4,25 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.R
 import com.submission.rifda_kitchen.databinding.ActivityDetailBinding
-import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
+import com.submission.rifda_kitchen.repository.Repository
+import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
+import com.submission.rifda_kitchen.viewmodel.DetailViewmodel
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private val repository = Repository()
+    private val detailViewModel : DetailViewmodel by viewModels{ ViewmodelFactory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +33,26 @@ class DetailActivity : AppCompatActivity() {
         val makananRingan = intent.getParcelableExtra<MakananRinganModel>("MAKANANRINGAN_EXTRA")
 
         if (makananBerat != null) {
-            bindProductDetails(makananBerat)
-            setupAddToCartButton(makananBerat)
+            detailViewModel.setMakananBerat(makananBerat)
         } else if (makananRingan != null) {
-            bindProductDetails(makananRingan)
-            setupAddToCartButton(makananRingan)
+            detailViewModel.setMakananRingan(makananRingan)
         }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        detailViewModel.makananBeratLiveData.observe(this, Observer { makananBerat ->
+            makananBerat?.let { bindProductDetails(it) }
+        })
+
+        detailViewModel.makananRinganLiveData.observe(this, Observer { makananRingan ->
+            makananRingan?.let { bindProductDetails(it) }
+        })
+
+        detailViewModel.addToCartSuccess.observe(this, Observer { message ->
+            message?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+        })
     }
 
     private fun bindProductDetails(product: Any) {
@@ -45,15 +63,16 @@ class DetailActivity : AppCompatActivity() {
                     tvProductPrice.formatPrice(product.price)
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
+                    setupAddToCartButton(product)
                 }
             }
-
             is MakananRinganModel -> {
                 binding.apply {
                     tvProductName.text = product.name
                     tvProductPrice.formatPrice(product.price)
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
+                    setupAddToCartButton(product)
                 }
             }
         }
@@ -67,22 +86,20 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showQuantityInputDialog(product: Any) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Enter Quantity")
+        builder.setTitle("Masukan Jumlah Produk")
 
-        // Set up the input field
         val input = EditText(this)
         input.inputType = InputType.TYPE_CLASS_NUMBER
         builder.setView(input)
 
-        builder.setPositiveButton("OK") { dialog, _ ->
+        builder.setPositiveButton("OK") { _, _ ->
             val quantityString = input.text.toString()
             val quantity = quantityString.toIntOrNull()
 
             if (quantity == null || quantity <= 0) {
-                Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Masukan jumlah yang sesuai", Toast.LENGTH_SHORT).show()
             } else {
-                // Proceed with adding the product to the cart
-                addToCart(product, quantity)
+                detailViewModel.addToCart(product, quantity)
             }
         }
 
@@ -91,39 +108,5 @@ class DetailActivity : AppCompatActivity() {
         }
 
         builder.show()
-    }
-
-    private fun addToCart(product: Any, quantity: Int) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
-        val cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userId)
-
-        // Create cart item based on product type
-        val cartItem = when (product) {
-            is MakananBeratModel -> CartModel(product.name, product.price, quantity)
-            is MakananRinganModel -> CartModel(product.name, product.price, quantity)
-            else -> return
-        }
-
-        // Check if the item already exists in the cart
-        cartRef.child(cartItem.name!!).get().addOnSuccessListener { dataSnapshot ->
-            if (dataSnapshot.exists()) {
-                // If the item already exists, show a toast message
-                Toast.makeText(this, "${cartItem.name} is already in the cart", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                // If the item does not exist, add it to the cart
-                cartRef.child(cartItem.name!!).setValue(cartItem)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "${cartItem.name} added to cart", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "Failed to add to cart", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }.addOnFailureListener {
-            // Handle any failure in reading from the database
-            Toast.makeText(this, "Error checking cart", Toast.LENGTH_SHORT).show()
-        }
     }
 }

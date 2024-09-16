@@ -29,10 +29,10 @@ class MakananBeratFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentMakananBeratBinding.inflate(inflater, container, false)
 
         showProducts()
+
         productViewmodel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
@@ -48,7 +48,6 @@ class MakananBeratFragment : Fragment() {
         }
         binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProduct.adapter = productAdapter
-
         productViewmodel.fetchMakananBerat()
         productViewmodel.makananBeratList.observe(viewLifecycleOwner) { list ->
             productAdapter.updateList(list)

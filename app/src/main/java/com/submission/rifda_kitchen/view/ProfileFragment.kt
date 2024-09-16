@@ -24,17 +24,12 @@ class ProfileFragment : Fragment() {
     private val authViewmodel: AuthViewmodel by viewModels { AuthViewmodelFactory(authRepository) }
     private val userViewmodel: UserViewmodel by viewModels { ViewmodelFactory(repository) }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         userViewmodel.getCurrentUser()
 
         showCurrentUser()
@@ -42,8 +37,9 @@ class ProfileFragment : Fragment() {
         binding.btnSignOut.setOnClickListener {
             signOut()
         }
-
+        return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

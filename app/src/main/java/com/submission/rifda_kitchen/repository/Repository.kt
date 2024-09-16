@@ -87,6 +87,33 @@ class Repository {
             callback(totalPrice)
         }
     }
+
+    fun addToCart(product: Any, quantity: Int, callback: (String?) -> Unit) {
+
+        val cartItem = when (product) {
+            is MakananBeratModel -> CartModel(product.name, product.price, quantity)
+            is MakananRinganModel -> CartModel(product.name, product.price, quantity)
+            else -> return
+        }
+
+        cartRef?.child(cartItem.name!!)?.get()?.addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                // If the item already exists
+                callback("${cartItem.name} Produk sudah ada di keranjang")
+            } else {
+                // If the item does not exist, add it to the cart
+                cartRef.child(cartItem.name!!).setValue(cartItem)
+                    .addOnSuccessListener {
+                        callback("${cartItem.name} berhasil ditambahkan ke keranjang")
+                    }
+                    .addOnFailureListener {
+                        callback("produk gagal ditambahkan ke keranjang")
+                    }
+            }
+        }?.addOnFailureListener {
+            callback("Error checking cart")
+        }
+    }
 }
 
 

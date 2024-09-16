@@ -22,7 +22,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,7 +31,6 @@ class HomeFragment : Fragment() {
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
-        // Attach the TabLayout with the ViewPager2
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Makanan Berat"
