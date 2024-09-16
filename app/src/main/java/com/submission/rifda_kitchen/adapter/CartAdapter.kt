@@ -12,9 +12,10 @@ import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.R
 import com.submission.rifda_kitchen.databinding.CartItemListBinding
 import com.submission.rifda_kitchen.model.CartModel
+import com.submission.rifda_kitchen.model.ProductModel
 
 class CartAdapter(
-    private val cartList: List<CartModel>
+    private var cartList: List<CartModel>
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     inner class CartViewHolder(private val binding: CartItemListBinding) :
@@ -79,4 +80,9 @@ class CartAdapter(
     }
 
     override fun getItemCount(): Int = cartList.size
+
+    fun updateList(newList: List<CartModel>) {
+        cartList = newList
+        notifyDataSetChanged()
+    }
 }

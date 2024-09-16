@@ -4,24 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.submission.rifda_kitchen.Helper.formatPrice
+import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.CartAdapter
 import com.submission.rifda_kitchen.databinding.FragmentCartBinding
-import com.submission.rifda_kitchen.model.CartModel
+import com.submission.rifda_kitchen.repository.Repository
+import com.submission.rifda_kitchen.viewModel.CartViewmodel
+import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 class CartFragment : Fragment() {
 
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
     private lateinit var cartAdapter: CartAdapter
+    private val repository = Repository()
+    private val cartViewmodel: CartViewmodel by viewModels { ViewmodelFactory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,43 +33,34 @@ class CartFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCartBinding.inflate(inflater, container, false)
-        setupCartRecyclerView()
+
+        showCartItems()
+        cartViewmodel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
+        cartViewmodel.getTotalPrice()
+        cartViewmodel.totalPrices.observe(viewLifecycleOwner) {
+            binding.tvTotal.formatPrice(it)
+        }
+
+
         return binding.root
     }
 
-    private fun setupCartRecyclerView() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
-        val cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userId)
+    private fun showCartItems() {
 
-        cartRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (!isAdded) return  // Ensure the fragment is still attached to the activity
+        cartAdapter = CartAdapter(emptyList())
+        binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvProduct.adapter = cartAdapter
+        cartViewmodel.fetchCartItems()
+        cartViewmodel.cartItemList.observe(viewLifecycleOwner) { list ->
+            cartAdapter.updateList(list)
+        }
 
-                val cartItems = mutableListOf<CartModel>()
-                var totalPrice = 0
-
-                for (cartSnapshot in snapshot.children) {
-                    val cartItem = cartSnapshot.getValue(CartModel::class.java)
-                    cartItem?.let {
-                        cartItems.add(it)
-                        totalPrice += (it.price * it.quantity)  // Calculate total price
-                    }
-                }
-
-                cartAdapter = CartAdapter(cartItems)
-                binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
-                binding.rvProduct.adapter = cartAdapter
-
-                // Update the total price on tvTotal
-                binding.tvTotal.formatPrice(totalPrice) // Ensure to format the price
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                if (!isAdded) return  // Ensure the fragment is still attached before showing a Toast
-                Toast.makeText(requireContext(), "Failed to load cart items", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

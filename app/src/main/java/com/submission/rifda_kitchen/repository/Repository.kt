@@ -7,20 +7,26 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 
 class Repository {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+
+    private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+    private val productRef: DatabaseReference = database.child("products")
+    private val cartRef: DatabaseReference? = auth.uid?.let {
+        database.child("carts").child(it)
+    }
 
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
     }
 
     fun fetchMakananBerat(callback: (List<MakananBeratModel>) -> Unit) {
-        database.child("products/makananberat").addValueEventListener(object : ValueEventListener {
+        productRef.child("makananberat").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val makananBeratList = mutableListOf<MakananBeratModel>()
                 for (snapshot in dataSnapshot.children) {
@@ -38,7 +44,7 @@ class Repository {
     }
 
     fun fetchMakananRingan(callback: (List<MakananRinganModel>) -> Unit) {
-        database.child("products/makananringan").addValueEventListener(object : ValueEventListener {
+        productRef.child("makananringan").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val makananRinganList = mutableListOf<MakananRinganModel>()
                 for (snapshot in dataSnapshot.children) {
@@ -54,4 +60,36 @@ class Repository {
             }
         })
     }
+
+    fun fetchCartItem(callback: (List<CartModel>) -> Unit) {
+        cartRef?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val cartItems = mutableListOf<CartModel>()
+                for (snapshot in dataSnapshot.children) {
+                    val cartItem = snapshot.getValue(CartModel::class.java)
+                    cartItem?.let { cartItems.add(it) }
+                }
+                callback(cartItems)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(emptyList())
+            }
+        })
+    }
+
+    fun getTotalPrice(callback: (Int) -> Unit) {
+        fetchCartItem { cartItems ->
+            var totalPrice = 0
+            for (cartItem in cartItems) {
+                totalPrice += cartItem.price * cartItem.quantity
+            }
+            callback(totalPrice)
+        }
+    }
 }
+
+
+
+
+

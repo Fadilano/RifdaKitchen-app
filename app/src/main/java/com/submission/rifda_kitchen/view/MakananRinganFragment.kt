@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.submission.rifda_kitchen.R
+import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.ProductAdapter
 import com.submission.rifda_kitchen.databinding.FragmentMakananRinganBinding
 import com.submission.rifda_kitchen.model.MakananRinganModel
@@ -31,18 +31,20 @@ class MakananRinganFragment : Fragment() {
         binding = FragmentMakananRinganBinding.inflate(inflater, container, false)
         showProducts()
         productViewmodel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            showLoading(it, binding.progressBar)
         }
         return binding.root
     }
 
 
     private fun showProducts() {
-        productAdapter = ProductAdapter(emptyList()) {
-                product ->
+        productAdapter = ProductAdapter(emptyList()) { product ->
             // Create an Intent to launch DetailActivity
             val intent = Intent(requireContext(), DetailActivity::class.java).apply {
-                putExtra("MAKANANRINGAN_EXTRA", product as MakananRinganModel) // Update with actual image resource
+                putExtra(
+                    "MAKANANRINGAN_EXTRA",
+                    product as MakananRinganModel
+                ) // Update with actual image resource
             }
             startActivity(intent)
         }
@@ -56,10 +58,6 @@ class MakananRinganFragment : Fragment() {
             productAdapter.updateList(list)
 
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 

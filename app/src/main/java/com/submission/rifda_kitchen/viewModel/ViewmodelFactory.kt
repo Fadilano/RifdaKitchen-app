@@ -16,6 +16,9 @@ class ViewmodelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(ProductViewmodel::class.java) -> {
                 return ProductViewmodel(repository) as T
             }
+            modelClass.isAssignableFrom(CartViewmodel::class.java) -> {
+                return CartViewmodel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

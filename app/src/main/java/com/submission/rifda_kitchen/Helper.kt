@@ -1,6 +1,8 @@
 package com.submission.rifda_kitchen
 
 import android.icu.text.DecimalFormat
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +19,9 @@ object Helper {
         return "IDR " + format.format(price).replace(",". toRegex(), ".")
     }
 
+    fun showLoading(isLoading: Boolean, progressBar: ProgressBar) {
+        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
 
 }

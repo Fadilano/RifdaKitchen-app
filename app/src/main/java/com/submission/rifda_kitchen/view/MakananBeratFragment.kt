@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.ProductAdapter
 import com.submission.rifda_kitchen.databinding.FragmentMakananBeratBinding
 import com.submission.rifda_kitchen.model.MakananBeratModel
@@ -33,14 +34,13 @@ class MakananBeratFragment : Fragment() {
 
         showProducts()
         productViewmodel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            showLoading(it, binding.progressBar)
         }
         return binding.root
     }
 
     private fun showProducts() {
         productAdapter = ProductAdapter(emptyList()) { product ->
-            // Create an Intent to launch DetailActivity
             val intent = Intent(requireContext(), DetailActivity::class.java).apply {
                 putExtra("MAKANANBERAT_EXTRA", product as MakananBeratModel)
             }
@@ -55,9 +55,7 @@ class MakananBeratFragment : Fragment() {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

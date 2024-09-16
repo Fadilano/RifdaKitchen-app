@@ -9,5 +9,4 @@ data class UserModel(
     var name: String? = "",
     var email: String? = "",
     var photo_url: String? = ""
-
 ) : Parcelable
