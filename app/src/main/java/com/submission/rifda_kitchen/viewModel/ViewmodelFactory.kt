@@ -3,7 +3,8 @@ package com.submission.rifda_kitchen.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.submission.rifda_kitchen.repository.Repository
-import com.submission.rifda_kitchen.viewmodel.DetailViewmodel
+
+
 
 class ViewmodelFactory(private val repository: Repository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -22,6 +23,12 @@ class ViewmodelFactory(private val repository: Repository) :
             }
             modelClass.isAssignableFrom(DetailViewmodel::class.java) -> {
                 return DetailViewmodel(repository) as T
+            }
+            modelClass.isAssignableFrom(OrderViewmodel::class.java) -> {
+                return OrderViewmodel(repository) as T
+            }
+            modelClass.isAssignableFrom(HistoryViewmodel::class.java) -> {
+                return HistoryViewmodel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

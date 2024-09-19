@@ -3,20 +3,19 @@ package com.submission.rifda_kitchen.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.R
 import com.submission.rifda_kitchen.databinding.CartItemListBinding
 import com.submission.rifda_kitchen.model.CartModel
-import com.submission.rifda_kitchen.model.ProductModel
+import com.submission.rifda_kitchen.viewModel.CartViewmodel
 
 class CartAdapter(
-    private var cartList: List<CartModel>
+    private var cartList: List<CartModel>,
+    private val cartViewmodel: CartViewmodel?
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+
 
     inner class CartViewHolder(private val binding: CartItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -37,36 +36,23 @@ class CartAdapter(
                     if (cartItem.quantity > 1) {
                         updateQuantity(cartItem, cartItem.quantity - 1)
                     } else {
-                        Toast.makeText(
-                            binding.root.context,
-                            "Minimum quantity is 1",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        removeItem(cartItem)
                     }
                 }
             }
         }
 
         private fun updateQuantity(cartItem: CartModel, newQuantity: Int) {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
-            val cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userId)
-                .child(cartItem.name!!)
-
-            cartRef.child("quantity").setValue(newQuantity)
-                .addOnSuccessListener {
-                    cartItem.quantity = newQuantity
-                    binding.tvProductQuantity.text = newQuantity.toString()
-                    Toast.makeText(binding.root.context, "Quantity updated", Toast.LENGTH_SHORT)
-                        .show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(
-                        binding.root.context,
-                        "Failed to update quantity",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            // Call the view model to update the quantity
+            cartViewmodel?.updateItemQuantity(cartItem, newQuantity)
         }
+
+        private fun removeItem(cartItem: CartModel) {
+            // Remove item through ViewModel
+            cartViewmodel?.removeItem(cartItem)
+        }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

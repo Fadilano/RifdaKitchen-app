@@ -17,6 +17,12 @@
         android:theme="@style/Theme.RifdaKitchen"
         tools:targetApi="31">
         <activity
+            android:name=".view.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.DetailActivity"
             android:exported="false" />
         <activity

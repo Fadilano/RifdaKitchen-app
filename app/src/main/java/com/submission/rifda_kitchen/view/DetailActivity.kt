@@ -16,7 +16,7 @@ import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.repository.Repository
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
-import com.submission.rifda_kitchen.viewmodel.DetailViewmodel
+import com.submission.rifda_kitchen.viewModel.DetailViewmodel
 
 class DetailActivity : AppCompatActivity() {
 

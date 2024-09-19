@@ -1,10 +1,9 @@
-package com.submission.rifda_kitchen.viewmodel
+package com.submission.rifda_kitchen.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.repository.Repository

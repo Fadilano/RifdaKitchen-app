@@ -10,14 +10,17 @@ import kotlinx.coroutines.launch
 
 class CartViewmodel(private val repository: Repository) : ViewModel() {
 
-    private val _cartItemList = MutableLiveData<List<CartModel>>()
-    var cartItemList: LiveData<List<CartModel>> = _cartItemList
+    private val _cartItemList = MutableLiveData<List<CartModel>?>()
+    var cartItemList: MutableLiveData<List<CartModel>?> = _cartItemList
 
     private val _totalPrices = MutableLiveData<Int>()
     var totalPrices: LiveData<Int> = _totalPrices
 
     private val _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
+
+    private val _quantityUpdateMessage = MutableLiveData<String?>()
+    var quantityUpdateMessage: MutableLiveData<String?> = _quantityUpdateMessage
 
     fun fetchCartItems() {
         viewModelScope.launch {
@@ -33,6 +36,50 @@ class CartViewmodel(private val repository: Repository) : ViewModel() {
             }
         }
     }
+    fun updateItemQuantity(cartModel: CartModel, quantity: Int) {
+        viewModelScope.launch {
+            repository.updateItemQuantity(cartModel, quantity) { success, message ->
+                if (success) {
+                    // Update the LiveData list by replacing the item with updated quantity
+                    val updatedList = _cartItemList.value?.map {
+                        if (it.name == cartModel.name) {
+                            it.copy(quantity = quantity)
+                        } else {
+                            it
+                        }
+                    }
+                    _cartItemList.postValue(updatedList)
+                }
+                _quantityUpdateMessage.postValue(message) // Post the message to show feedback in the UI
+            }
+        }
+    }
+
+    fun removeItem(cartModel: CartModel) {
+        viewModelScope.launch {
+            repository.removeItem(cartModel) { success, message ->
+                if (success) {
+                    val updatedList = _cartItemList.value?.filter { it.name != cartModel.name }
+                    _cartItemList.postValue(updatedList)
+                }
+                _quantityUpdateMessage.postValue(message)
+            }
+        }
+    }
+
+    fun removeAllItems() {
+        viewModelScope.launch {
+            repository.removeAllItems { success, message ->
+                if (success) {
+                    _cartItemList.postValue(emptyList()) // Clear the list in ViewModel
+                    _quantityUpdateMessage.postValue("All items removed from cart")
+                } else {
+                    _quantityUpdateMessage.postValue(message)
+                }
+            }
+        }
+    }
+
 
     fun getTotalPrice() {
         viewModelScope.launch {

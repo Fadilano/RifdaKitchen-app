@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    style="@style/Widget.Material3.CardView.Filled"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/md_theme_primaryContainer">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/tvTitleDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitleDate"
+            app:layout_constraintStart_toEndOf="@+id/tvTitleDate"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitleConfirmationStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Status : "
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvTitleDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitleDate" />
+
+        <TextView
+            android:id="@+id/tvconfirmationStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitleConfirmationStatus"
+            app:layout_constraintStart_toEndOf="@+id/tvTitleConfirmationStatus" />
+
+        <ImageView
+            android:id="@+id/btnToDetail"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>
