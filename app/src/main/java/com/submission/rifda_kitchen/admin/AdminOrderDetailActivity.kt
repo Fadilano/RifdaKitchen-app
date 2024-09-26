@@ -3,25 +3,23 @@ package com.submission.rifda_kitchen.admin
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.submission.rifda_kitchen.admin.retrofit.CustomerDetails
-import com.submission.rifda_kitchen.admin.retrofit.PaymentLinkRequest
-import com.submission.rifda_kitchen.admin.retrofit.PaymentLinkResponse
-import com.submission.rifda_kitchen.admin.retrofit.RetrofitClient
-import com.submission.rifda_kitchen.admin.retrofit.TransactionDetails
+import androidx.lifecycle.ViewModelProvider
+import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModel
+import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModelFactory
+import com.submission.rifda_kitchen.admin.model.CustomerDetails
+import com.submission.rifda_kitchen.admin.model.PaymentLinkRequest
+import com.submission.rifda_kitchen.admin.model.TransactionDetails
+import com.submission.rifda_kitchen.admin.repository.AdminRepository
 import com.submission.rifda_kitchen.databinding.ActivityAdminOrderDetailBinding
 import com.submission.rifda_kitchen.model.OrderModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AdminOrderDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminOrderDetailBinding
-    private lateinit var database: DatabaseReference
+    private lateinit var viewModel: AdminViewModel
     private var order: OrderModel? = null
     private var userId: String? = null
     private var orderId: String? = null
@@ -32,32 +30,67 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         binding = ActivityAdminOrderDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        database = FirebaseDatabase.getInstance().reference
+        val repository = AdminRepository()
+        viewModel =
+            ViewModelProvider(this, AdminViewModelFactory(repository))[AdminViewModel::class.java]
 
         // Retrieve userId and orderId passed through Intent
         userId = intent.getStringExtra("userId")
         orderId = intent.getStringExtra("orderId")
         order = intent.getParcelableExtra("order")
 
+        setSupportActionBar(binding.adminDetailToolbar)
+        supportActionBar?.title = ("Admin Panel")
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
         order?.let {
             displayOrderDetails(it)
         }
 
-        // Update confirmation status when button is clicked
-        binding.btnUpdateStatus.setOnClickListener {
-            val newStatus = !(order?.confirmationStatus ?: false) // Toggle confirmation status
-            updateConfirmationStatus(newStatus)
+        // Observing ViewModel LiveData
+        viewModel.confirmationStatusUpdated.observe(this) { success ->
+            if (success) {
+                val newStatus = !(order?.confirmationStatus ?: false)
+                binding.tvAdminOrderStatus.text = if (newStatus) "Confirmed" else "Pending"
+            }
         }
 
-        // Generate and set payment link when button is clicked
+        viewModel.paymentLinkCreated.observe(this) { link ->
+            binding.etPaymentLink.setText(link)
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+            Log.e("AdminOrderDetailActivity", message)
+        }
+
+        // Event handlers
+        binding.btnUpdateStatus.setOnClickListener {
+            val newStatus = !(order?.confirmationStatus ?: false)
+            viewModel.updateConfirmationStatus(userId ?: "", orderId ?: "", newStatus)
+        }
+
         binding.btnGeneratePaymentLink.setOnClickListener {
             order?.let {
-                createPaymentLink(it)
+                val paymentRequest = createPaymentLinkRequest(it)
+                viewModel.createPaymentLink(paymentRequest)
+            }
+        }
+
+        viewModel.paymentLinkCreated.observe(this) { link ->
+            if (!link.isNullOrEmpty()) {
+                // Display the payment link
+                binding.etPaymentLink.setText(link)
+
+                // Update the payment link in Firebase
+                viewModel.updatePaymentLink(userId ?: "", orderId ?: "", link)
+
+                // Show a success message to the admin
+                Toast.makeText(this, "Payment link generated and updated!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // Function to display order details in the UI
+    // Helper function to display order details
     private fun displayOrderDetails(order: OrderModel) {
         binding.tvAdminCustomerName.text = order.name
         binding.tvAdminCustomerPhone.text = order.phone
@@ -66,84 +99,22 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         binding.etPaymentLink.setText(order.paymentLink ?: "")
     }
 
-    // Function to update confirmation status in Firebase
-    private fun updateConfirmationStatus(confirmed: Boolean) {
-        if (userId != null && orderId != null) {
-            val orderRef = database.child("orders").child(userId!!).child(orderId!!)
-            orderRef.child("confirmationStatus").setValue(confirmed)
-                .addOnSuccessListener {
-                    binding.tvAdminOrderStatus.text = if (confirmed) "Confirmed" else "Pending"
-                }
-                .addOnFailureListener {
-                    Log.e("Admin", "Failed to update confirmation status: ${it.message}")
-                }
-        }
-    }
 
-    // Function to create a payment link via the Midtrans API
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createPaymentLink(order: OrderModel) {
-        val midtransApiService = RetrofitClient.getMidtransService()
-
-        val paymentRequest = PaymentLinkRequest(
-            payment_type = "bank_transfer", // or other payment types
+    private fun createPaymentLinkRequest(order: OrderModel): PaymentLinkRequest {
+        return PaymentLinkRequest(
+            payment_type = "bank_transfer",
             transaction_details = TransactionDetails(
-                order_id = orderId ?: "", // orderId from intent
+                order_id = orderId ?: "",
                 gross_amount = order.totalPrice
             ),
             customer_details = CustomerDetails(
                 first_name = order.name!!,
-                email = "test@example.com",  // Assuming email is not provided, modify accordingly
-                phone = "085883327454"
+                email = order.email!!,
+                phone = order.phone!!
             )
         )
-
-        // Make the API call
-        midtransApiService.createPaymentLink(paymentRequest)
-            .enqueue(object : Callback<PaymentLinkResponse> {
-                override fun onResponse(
-                    call: Call<PaymentLinkResponse>,
-                    response: Response<PaymentLinkResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val paymentLink = response.body()?.payment_url
-                        paymentLink?.let {
-                            Log.d("MidtransAPI", "Payment link generated: $it")
-                            // Save the payment link to Firebase under the order
-                            updatePaymentLinkInFirebase(it)
-                        }
-                    } else {
-                        // Handle errors
-                        Log.e("MidtransAPI", "Error: ${response.errorBody()?.string()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<PaymentLinkResponse>, t: Throwable) {
-                    // Handle failure
-                    Log.e("MidtransAPI", "Failed to create payment link", t)
-                }
-            })
-    }
-
-    // Function to update payment link in Firebase
-    private fun updatePaymentLinkInFirebase(paymentLink: String) {
-        if (userId != null && orderId != null) {
-            Log.d("Admin", "Updating payment link in Firebase for UserId: $userId, OrderId: $orderId")
-
-            val orderRef = FirebaseDatabase.getInstance().getReference("orders")
-                .child(userId!!)
-                .child(orderId!!)
-
-            orderRef.child("paymentLink").setValue(paymentLink)
-                .addOnSuccessListener {
-                    binding.etPaymentLink.setText(paymentLink)
-                    Log.d("Admin", "Payment link updated successfully in Firebase")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Admin", "Failed to update payment link in Firebase: ${e.message}")
-                }
-        } else {
-            Log.e("Admin", "UserId or OrderId is null. Cannot update payment link in Firebase.")
-        }
     }
 }
+

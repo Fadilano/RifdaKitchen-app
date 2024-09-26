@@ -18,9 +18,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MIDTRANS_BASE_URL", "\"https://api.sandbox.midtrans.com/\"")
+        buildConfigField("String", "SERVER_KEY", "\"SB-Mid-server-Zbsb-T_jALFkRUFnHZadfbd2\"")
+        buildConfigField("String", "ADMIN_KEY", "\"59G9E3ElfTgk1fInc4octGE2fw22\"")
+
+
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -31,6 +37,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

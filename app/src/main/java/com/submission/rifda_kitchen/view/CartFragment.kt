@@ -9,21 +9,25 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.adapter.CartAdapter
 import com.submission.rifda_kitchen.databinding.FragmentCartBinding
 import com.submission.rifda_kitchen.repository.Repository
 import com.submission.rifda_kitchen.viewModel.CartViewmodel
+import com.submission.rifda_kitchen.viewModel.UserViewmodel
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 class CartFragment : Fragment() {
 
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
+    private val repository = Repository()
 
     private lateinit var cartAdapter: CartAdapter
-    private val cartViewModel: CartViewmodel by viewModels { ViewmodelFactory(Repository()) }
+    private val cartViewModel: CartViewmodel by viewModels { ViewmodelFactory(repository) }
+    private val userViewModel: UserViewmodel by viewModels { ViewmodelFactory(repository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +46,7 @@ class CartFragment : Fragment() {
         // Fetch the cart items when the fragment is created
         cartViewModel.fetchCartItems()
         cartViewModel.getTotalPrice()
+        userViewModel.getCurrentUser()
 
         binding.btnCheckout.setOnClickListener {
             navigateToOrderActivity()
@@ -65,6 +70,7 @@ class CartFragment : Fragment() {
                     cartAdapter.updateList(cartItems)
                 } else {
                     Log.d("CartViewModel", "No items in cart")
+                    binding.tvNoItem.visibility = View.VISIBLE
                 }
             }
         }
@@ -86,11 +92,19 @@ class CartFragment : Fragment() {
     private fun navigateToOrderActivity() {
         cartViewModel.cartItemList.value?.let { cartItems ->
             cartViewModel.totalPrices.value?.let { totalPrice ->
-                val intent = Intent(requireContext(), OrderActivity::class.java).apply {
-                    putParcelableArrayListExtra("cartItems", ArrayList(cartItems))
-                    putExtra("totalPrice", totalPrice)
+                userViewModel.currentUser.value?.let { user ->
+                    val intent = Intent(requireContext(), OrderActivity::class.java).apply {
+                        putParcelableArrayListExtra("cartItems", ArrayList(cartItems))
+                        putExtra("totalPrice", totalPrice)
+                        putExtra("name", user.name.toString())
+                        putExtra("uid", user.uid.toString())
+                        putExtra("email", user.email.toString())
+                        if (user.phone != null) {putExtra("phone", user.phone.toString())}
+                        if (user.address != null) {putExtra("address", user.address.toString())}
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
+
             }
         }
     }

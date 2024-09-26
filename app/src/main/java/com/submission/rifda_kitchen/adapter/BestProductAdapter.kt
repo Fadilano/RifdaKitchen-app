@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.R
-import com.submission.rifda_kitchen.databinding.ProductItemListBinding
+import com.submission.rifda_kitchen.databinding.BestProductListBinding
 import com.submission.rifda_kitchen.model.ProductModel
 
-class ProductAdapter(
+class BestProductAdapter(
     private var productList: List<ProductModel>,
     private val onItemClick: (ProductModel) -> Unit
-) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+) : RecyclerView.Adapter<BestProductAdapter.ProductViewHolder>() {
 
 
-    inner class ProductViewHolder(private val binding: ProductItemListBinding) :
+    inner class ProductViewHolder(private val binding: BestProductListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductModel) {
             binding.apply {
@@ -33,7 +33,7 @@ class ProductAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding =
-            ProductItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            BestProductListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
@@ -41,7 +41,9 @@ class ProductAdapter(
         holder.bind(productList[position])
     }
 
-    override fun getItemCount(): Int = productList.size
+    override fun getItemCount(): Int {
+        return if (productList.size > 2) 2 else productList.size
+    }
 
     fun updateList(newList: List<ProductModel>) {
         productList = newList

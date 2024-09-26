@@ -1,21 +1,39 @@
 package com.submission.rifda_kitchen.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.submission.rifda_kitchen.Helper.showLoading
+import com.submission.rifda_kitchen.adapter.BestProductAdapter
+import com.submission.rifda_kitchen.adapter.ProductAdapter
 import com.submission.rifda_kitchen.adapter.ViewPagerAdapter
 import com.submission.rifda_kitchen.databinding.FragmentHomeBinding
+import com.submission.rifda_kitchen.model.MakananRinganModel
+import com.submission.rifda_kitchen.model.ProductModel
+import com.submission.rifda_kitchen.repository.Repository
+import com.submission.rifda_kitchen.viewModel.ProductViewmodel
+import com.submission.rifda_kitchen.viewModel.UserViewmodel
+import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var BestProductAdapter: BestProductAdapter? = null
+    private val repository = Repository()
+    private val productViewmodel: ProductViewmodel by viewModels { ViewmodelFactory(repository) }
+    private val userViewmodel: UserViewmodel by viewModels { ViewmodelFactory(repository) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        userViewmodel.getCurrentUser()
     }
 
     override fun onCreateView(
@@ -30,6 +48,14 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
+        userViewmodel.currentUser.observe(viewLifecycleOwner) { user ->
+            binding.tvUsername.text = user?.name
+        }
+
+        showProducts()
+        productViewmodel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
@@ -39,6 +65,27 @@ class HomeFragment : Fragment() {
             }
         }.attach()
     }
+
+    private fun showProducts() {
+        BestProductAdapter = BestProductAdapter(emptyList()) { product ->
+            val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+                putExtra(
+                    "MAKANANRINGAN_EXTRA",
+                    product as MakananRinganModel
+                )
+            }
+            startActivity(intent)
+        }
+        binding.rvBestProduct.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvBestProduct.adapter = BestProductAdapter
+        productViewmodel.fetchMakananRingan()
+        productViewmodel.makananRinganList.observe(viewLifecycleOwner) { list ->
+
+            BestProductAdapter!!.updateList(list)
+
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

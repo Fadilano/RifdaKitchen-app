@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.ProductAdapter
@@ -52,7 +53,7 @@ class MakananRinganFragment : Fragment() {
             }
             startActivity(intent)
         }
-        binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvProduct.adapter = productAdapter
         productViewmodel.fetchMakananRingan()
         productViewmodel.makananRinganList.observe(viewLifecycleOwner) { list ->

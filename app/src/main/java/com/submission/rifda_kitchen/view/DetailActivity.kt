@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -39,7 +40,19 @@ class DetailActivity : AppCompatActivity() {
         }
 
         observeViewModel()
+
+        setSupportActionBar(binding.toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 
     private fun observeViewModel() {
         detailViewModel.makananBeratLiveData.observe(this, Observer { makananBerat ->
@@ -64,6 +77,7 @@ class DetailActivity : AppCompatActivity() {
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
                     setupAddToCartButton(product)
+                    supportActionBar?.title = product.name
                 }
             }
             is MakananRinganModel -> {
@@ -73,6 +87,7 @@ class DetailActivity : AppCompatActivity() {
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
                     setupAddToCartButton(product)
+                    supportActionBar?.title = product.name
                 }
             }
         }

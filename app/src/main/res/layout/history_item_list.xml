@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     style="@style/Widget.Material3.CardView.Filled"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:background="@color/md_theme_primaryContainer">
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardCornerRadius="16dp"
+    android:background="@color/md_theme_secondaryContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:background="@color/md_theme_secondaryContainer"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvTitleDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order"
+            android:text="Order :"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-
+            android:textColor="@color/md_theme_onSecondaryContainer"
             app:layout_constraintBottom_toBottomOf="@+id/tvTitleDate"
             app:layout_constraintStart_toEndOf="@+id/tvTitleDate"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,9 +51,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-
+            android:layout_marginTop="8dp"
+            android:maxLines="2"
+            android:textColor="@color/md_theme_onSecondaryContainer"
             app:layout_constraintBottom_toBottomOf="@+id/tvTitleConfirmationStatus"
-            app:layout_constraintStart_toEndOf="@+id/tvTitleConfirmationStatus" />
+            app:layout_constraintStart_toEndOf="@+id/tvTitleConfirmationStatus"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitleDate" />
 
         <ImageView
             android:id="@+id/btnToDetail"

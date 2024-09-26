@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.submission.rifda_kitchen.BuildConfig
 import com.submission.rifda_kitchen.admin.AdminActivity
 import com.submission.rifda_kitchen.databinding.FragmentProfileBinding
 import com.submission.rifda_kitchen.repository.AuthRepository
@@ -25,28 +26,31 @@ class ProfileFragment : Fragment() {
     private val authViewmodel: AuthViewmodel by viewModels { AuthViewmodelFactory(authRepository) }
     private val userViewmodel: UserViewmodel by viewModels { ViewmodelFactory(repository) }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
         userViewmodel.getCurrentUser()
 
         showCurrentUser()
+        showAdminButton()
 
         binding.btnSignOut.setOnClickListener {
             signOut()
         }
         binding.btnEditProfile.setOnClickListener {
+
+        }
+
+        binding.btnAdminPanel.setOnClickListener {
             val intent = Intent(requireContext(), AdminActivity::class.java)
             startActivity(intent)
         }
 
-
         return binding.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -73,5 +77,13 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
+    private fun showAdminButton() {
+        userViewmodel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (BuildConfig.ADMIN_KEY == user?.uid) {
+                binding.btnAdminPanel.visibility = View.VISIBLE
+            } else {
+                binding.btnAdminPanel.visibility = View.GONE
+            }
+        }
+    }
 }

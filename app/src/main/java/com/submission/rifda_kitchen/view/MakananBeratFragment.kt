@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.submission.rifda_kitchen.Helper.showLoading
 import com.submission.rifda_kitchen.adapter.ProductAdapter
 import com.submission.rifda_kitchen.databinding.FragmentMakananBeratBinding
@@ -46,14 +46,16 @@ class MakananBeratFragment : Fragment() {
             }
             startActivity(intent)
         }
-        binding.rvProduct.layoutManager = LinearLayoutManager(requireContext())
+
+
+        binding.rvProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+
         binding.rvProduct.adapter = productAdapter
         productViewmodel.fetchMakananBerat()
         productViewmodel.makananBeratList.observe(viewLifecycleOwner) { list ->
             productAdapter.updateList(list)
         }
     }
-
 
 
     override fun onDestroyView() {

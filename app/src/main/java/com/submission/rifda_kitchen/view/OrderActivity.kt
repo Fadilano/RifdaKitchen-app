@@ -12,12 +12,10 @@ import com.submission.rifda_kitchen.adapter.OrderAdapter
 import com.submission.rifda_kitchen.databinding.ActivityOrderBinding
 import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.OrderModel
-import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.repository.Repository
-import com.submission.rifda_kitchen.viewModel.AuthViewmodel
-import com.submission.rifda_kitchen.viewModel.AuthViewmodelFactory
 import com.submission.rifda_kitchen.viewModel.CartViewmodel
 import com.submission.rifda_kitchen.viewModel.OrderViewmodel
+import com.submission.rifda_kitchen.viewModel.UserViewmodel
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,23 +39,34 @@ class OrderActivity : AppCompatActivity() {
 
         repository = Repository()
 
-
         val cartItems: List<CartModel>? = intent.getParcelableArrayListExtra("cartItems")
         val totalPrice: Int = intent.getIntExtra("totalPrice", 0)
+        val custName = intent.getStringExtra("name")
+        val userId = intent.getStringExtra("uid")
+        val custEmail = intent.getStringExtra("email")
+        val custPhone = intent.getStringExtra("phone")
+        val custAddress = intent.getStringExtra("address")
+
+        binding.custName.setText(custName)
+        binding.custPhone.setText(custPhone)
+        binding.custAddress.setText(custAddress)
 
         cartItems?.let { displayCartItems(it) }
-        binding.tvTotal.formatPrice(totalPrice)
 
+        binding.tvTotal.formatPrice(totalPrice)
         setupDatePicker()
 
         binding.btnOrder.setOnClickListener {
+
             val custName = binding.custName.text.toString().trim()
             val custAddress = binding.custAddress.text.toString().trim()
             val custPhone = binding.custPhone.text.toString().trim()
             val orderDate = binding.orderDate.text.toString().trim()
 
+
             if (custName.isNotEmpty() && custAddress.isNotEmpty() && custPhone.isNotEmpty() && orderDate.isNotEmpty()) {
-                val userId = orderViewmodel.getCurrenUser()
+
+
                 val order = OrderModel(
                     orderId = "",
                     userId = userId,
@@ -67,11 +76,16 @@ class OrderActivity : AppCompatActivity() {
                     address = custAddress,
                     phone = custPhone,
                     date = orderDate,
+                    email = custEmail,
                     confirmationStatus = false,
                     paymentStatus = false,
                     paymentLink = ""
                 )
                 orderViewmodel.saveOrder(order)
+                if (userId != null) {
+                    orderViewmodel.updateUserDetails(userId, custPhone, custAddress)
+                }
+
 
             } else {
                 Toast.makeText(this, "Data tidak boleh kosong", Toast.LENGTH_SHORT).show()

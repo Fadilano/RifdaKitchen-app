@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.submission.rifda_kitchen.BuildConfig
+import com.submission.rifda_kitchen.admin.AdminActivity
 import com.submission.rifda_kitchen.databinding.ActivityLoginBinding
 import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.viewModel.AuthViewmodel
@@ -38,15 +40,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signIn() {
-        lifecycleScope.launch {
-            val isSuccess = authViewmodel.signIn(this@LoginActivity)
-            if (isSuccess) {
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                finish()
-            } else {
-                Log.d(TAG, "Sign-in failed")
-            }
-        }
+        authViewmodel.signIn(this)
     }
 
     companion object {

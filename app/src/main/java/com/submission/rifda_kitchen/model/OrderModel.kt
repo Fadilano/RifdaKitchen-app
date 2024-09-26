@@ -15,6 +15,7 @@ data class OrderModel(
     var address: String? = null,
     var phone: String? = null,
     var date: String? = null,
+    var email: String? = null,
     var confirmationStatus: Boolean = false,
     var paymentStatus: Boolean = false,
     var paymentLink: String? = null,

@@ -14,11 +14,18 @@ class OrderViewmodel(private val repository: Repository) : ViewModel() {
     val orderResult: LiveData<Pair<Boolean, String>> = _orderResult
 
 
+
     fun saveOrder(order: OrderModel) {
         repository.saveOrder(order) { success, message ->
             _orderResult.value = Pair(success, message)
         }
     }
-    fun getCurrenUser() = repository.getCurrentUser()?.uid
+
+    fun updateUserDetails(userId: String, phone: String, address: String) {
+        viewModelScope.launch {
+            repository.updateUserDetails(userId, phone, address)
+        }
+    }
+
 
 }

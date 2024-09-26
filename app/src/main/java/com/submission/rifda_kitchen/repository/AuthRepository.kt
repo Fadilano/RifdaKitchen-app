@@ -16,7 +16,10 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.submission.rifda_kitchen.R
+import com.submission.rifda_kitchen.model.UserModel
 import com.submission.rifda_kitchen.view.LoginActivity
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -24,6 +27,9 @@ import kotlinx.coroutines.tasks.await
 class AuthRepository {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+
+    fun getFirebaseUser() = auth.currentUser
 
     suspend fun signInWithGoogleIdToken(context: Context): Boolean {
         val credentialManager = CredentialManager.create(context)
@@ -79,10 +85,32 @@ class AuthRepository {
     suspend fun firebaseAuthWithGoogle(idToken: String): Boolean {
         val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
         return try {
-            auth.signInWithCredential(credential).await().user != null
+           val authResult = auth.signInWithCredential(credential).await()
+            val user = authResult.user
+            if (user != null) {
+                val uid = user.uid
+                val name = user.displayName ?: "Unknown Name"
+                val email = user.email ?: "Unknown Email"
+                val photoUrl = user.photoUrl ?: "Unknown Photo Url"
+                saveUserData(uid, name, email, photoUrl.toString())
+                true
+            } else {
+                false
+            }
         } catch (e: Exception) {
             Log.w(TAG, "signInWithCredential:failure", e)
             false
+        }
+    }
+
+    suspend fun saveUserData(uid: String, name: String, email: String, photoUrl: String) {
+        val user = UserModel(uid, name, email, photoUrl)
+        database.child("users").child(uid).setValue(user).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // User data saved successfully
+            } else {
+                // Handle failure
+            }
         }
     }
 

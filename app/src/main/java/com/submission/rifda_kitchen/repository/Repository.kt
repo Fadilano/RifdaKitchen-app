@@ -12,20 +12,44 @@ import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.model.OrderModel
+import com.submission.rifda_kitchen.model.UserModel
 
 class Repository {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
     private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference()
     private val productRef: DatabaseReference = database.child("products")
     private val cartRef: DatabaseReference? = auth.uid?.let {
         database.child("carts").child(it)
     }
     val orderRef: DatabaseReference = database.child("orders")
+    private val userRef: DatabaseReference = database.child("users")
 
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
+    }
+
+    fun getCurrentUserUID(): String? {
+        return auth.currentUser?.uid
+    }
+
+    // Fetch user data from Firebase Realtime Database
+    fun fetchUserData(callback: (UserModel?) -> Unit) {
+        val uid = getCurrentUserUID()
+        if (uid != null) {
+            userRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(UserModel::class.java)
+                    callback(user)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(null)
+                }
+            })
+        } else {
+            callback(null)
+        }
     }
 
     fun fetchMakananBerat(callback: (List<MakananBeratModel>) -> Unit) {
@@ -207,8 +231,10 @@ class Repository {
         })
     }
 
-
-
+    suspend fun updateUserDetails(userId: String, phone: String, address: String) {
+        userRef.child(userId).child("phone").setValue(phone)
+        userRef.child(userId).child("address").setValue(address)
+    }
 
 }
 

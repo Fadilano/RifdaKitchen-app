@@ -3,5 +3,5 @@
     <string name="default_web_client_id">328137252352-8fr75snmt3qh75sflinu4veme5l5f9lb.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="Welcome">Selamat datang di\n<b><i>RIFDA KITCHEN</i></b></string>
+    <string name="Welcome">Selamat datang di <b><i>RIFDA KITCHEN</i></b></string>
 </resources>

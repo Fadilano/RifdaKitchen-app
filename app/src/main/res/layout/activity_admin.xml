@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".admin.AdminActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/adminToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_primaryContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvTotalOrders"
         android:layout_width="wrap_content"
@@ -15,7 +24,7 @@
         android:text="Total Orders: 0"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/adminToolbar"/>
 
     <TextView
         android:id="@+id/tvTotalUsers"

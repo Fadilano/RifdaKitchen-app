@@ -53,6 +53,8 @@ class HistoryFragment : Fragment() {
         historyViewModel.orderList.observe(viewLifecycleOwner) { orders ->
             if (orders != null) {
                 (binding.rvHistory.adapter as HistoryAdapter).updateList(orders)
+            } else {
+                binding.tvNoItem.visibility = View.VISIBLE
             }
         }
 
