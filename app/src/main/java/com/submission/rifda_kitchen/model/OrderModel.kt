@@ -7,14 +7,15 @@ import kotlinx.parcelize.Parcelize
 @IgnoreExtraProperties
 @Parcelize
 data class OrderModel(
+    var orderId: String? = null,
+    var userId:String? = null,
     var cartItems: List<CartModel>? = emptyList(),
     var totalPrice: Int = 0,
     var name: String? = null,
     var address: String? = null,
     var phone: String? = null,
     var date: String? = null,
-    var confirmationStatus:Boolean = false,
-    var paymentLink: String? = null,
-    var receipt: String? = null,
+    var confirmationStatus: Boolean = false,
     var paymentStatus: Boolean = false,
-) : Parcelable
+    var paymentLink: String? = null,
+    ) : Parcelable

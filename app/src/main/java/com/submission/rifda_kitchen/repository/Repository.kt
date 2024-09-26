@@ -22,7 +22,7 @@ class Repository {
     private val cartRef: DatabaseReference? = auth.uid?.let {
         database.child("carts").child(it)
     }
-    private val orderRef: DatabaseReference? = database.child("orders")
+    val orderRef: DatabaseReference = database.child("orders")
 
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
@@ -165,13 +165,15 @@ class Repository {
     fun saveOrder(order: OrderModel, callback: (Boolean, String) -> Unit) {
         val userId = getCurrentUser()?.uid
         if (userId != null) {
-            val orderId = orderRef?.child(userId)?.push()?.key // Generate a unique order ID
+            val orderId = orderRef.child(userId).push().key // Generate a unique order ID
             if (orderId != null) {
-                orderRef?.child(userId)?.child(orderId)?.setValue(order)
-                    ?.addOnSuccessListener {
+                val orderToSave = order.copy(orderId = orderId, userId = userId) // Set orderId and userId
+
+                orderRef.child(userId).child(orderId).setValue(orderToSave)
+                    .addOnSuccessListener {
                         callback(true, "Order berhasil dibuat, silahkan tunggu konfirmasi dari admin!")
                     }
-                    ?.addOnFailureListener {
+                    .addOnFailureListener {
                         callback(false, "Gagal membuat order")
                     }
             } else {
@@ -182,10 +184,11 @@ class Repository {
         }
     }
 
-    fun fetchOrdersForUser(userUID: String, callback: (List<OrderModel>?) -> Unit) {
-        val userOrdersRef = orderRef?.child(userUID)
 
-        userOrdersRef?.addValueEventListener(object : ValueEventListener {
+    fun fetchOrdersForUser(userUID: String, callback: (List<OrderModel>?) -> Unit) {
+        val userOrdersRef = orderRef.child(userUID)
+
+        userOrdersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val ordersList = mutableListOf<OrderModel>()
                 for (orderSnapshot in dataSnapshot.children) {
@@ -203,6 +206,7 @@ class Repository {
             }
         })
     }
+
 
 
 

@@ -15,7 +15,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RifdaKitchen"
+        tools:replace="android:allowBackup"
         tools:targetApi="31">
+
+        <activity
+            android:name=".admin.AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminOrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.OrderDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".view.EditProfileActivity"
             android:exported="false" />

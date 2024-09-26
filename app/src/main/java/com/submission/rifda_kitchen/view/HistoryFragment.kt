@@ -1,5 +1,6 @@
 package com.submission.rifda_kitchen.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.adapter.HistoryAdapter
 import com.submission.rifda_kitchen.databinding.FragmentHistoryBinding
+import com.submission.rifda_kitchen.model.OrderModel
 import com.submission.rifda_kitchen.repository.Repository
 import com.submission.rifda_kitchen.viewModel.HistoryViewmodel
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
@@ -40,7 +42,9 @@ class HistoryFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val adapter = HistoryAdapter(emptyList())
+        val adapter = HistoryAdapter(emptyList()) { order ->
+            navigateToOrderDetail(order)  // Navigate to OrderDetailActivity when an item is clicked
+        }
         binding.rvHistory.adapter = adapter
         binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -55,6 +59,12 @@ class HistoryFragment : Fragment() {
         historyViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
+    }
+    private fun navigateToOrderDetail(order: OrderModel) {
+        val intent = Intent(requireContext(), OrderDetailActivity::class.java).apply {
+            putExtra("order", order)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

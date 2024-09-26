@@ -12,23 +12,25 @@ import com.submission.rifda_kitchen.adapter.OrderAdapter
 import com.submission.rifda_kitchen.databinding.ActivityOrderBinding
 import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.OrderModel
+import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.repository.Repository
+import com.submission.rifda_kitchen.viewModel.AuthViewmodel
+import com.submission.rifda_kitchen.viewModel.AuthViewmodelFactory
 import com.submission.rifda_kitchen.viewModel.CartViewmodel
 import com.submission.rifda_kitchen.viewModel.OrderViewmodel
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+
 class OrderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderBinding
     private lateinit var repository: Repository
-    private val orderViewmodel: OrderViewmodel by viewModels {
-        ViewmodelFactory(repository)
-    }
-    private val cartViewmodel: CartViewmodel by viewModels {
-        ViewmodelFactory(repository)
-    }
+
+    private val orderViewmodel: OrderViewmodel by viewModels { ViewmodelFactory(repository) }
+    private val cartViewmodel: CartViewmodel by viewModels { ViewmodelFactory(repository) }
+
     private val calendar = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -37,8 +39,8 @@ class OrderActivity : AppCompatActivity() {
         binding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize the repository here
         repository = Repository()
+
 
         val cartItems: List<CartModel>? = intent.getParcelableArrayListExtra("cartItems")
         val totalPrice: Int = intent.getIntExtra("totalPrice", 0)
@@ -48,26 +50,29 @@ class OrderActivity : AppCompatActivity() {
 
         setupDatePicker()
 
-
-
         binding.btnOrder.setOnClickListener {
             val custName = binding.custName.text.toString().trim()
             val custAddress = binding.custAddress.text.toString().trim()
             val custPhone = binding.custPhone.text.toString().trim()
             val orderDate = binding.orderDate.text.toString().trim()
 
-            if (custName.isNotEmpty() && custAddress.isNotEmpty() && custPhone.isNotEmpty() && orderDate.isNotEmpty()){
+            if (custName.isNotEmpty() && custAddress.isNotEmpty() && custPhone.isNotEmpty() && orderDate.isNotEmpty()) {
+                val userId = orderViewmodel.getCurrenUser()
                 val order = OrderModel(
+                    orderId = "",
+                    userId = userId,
                     cartItems = cartItems,
                     totalPrice = totalPrice,
-                    name = binding.custName.text.toString(),
-                    address = binding.custAddress.text.toString(),
-                    phone = binding.custPhone.text.toString(),
-                    date = binding.orderDate.text.toString(),
+                    name = custName,
+                    address = custAddress,
+                    phone = custPhone,
+                    date = orderDate,
                     confirmationStatus = false,
-                    paymentStatus = false
+                    paymentStatus = false,
+                    paymentLink = ""
                 )
                 orderViewmodel.saveOrder(order)
+
             } else {
                 Toast.makeText(this, "Data tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
@@ -92,6 +97,7 @@ class OrderActivity : AppCompatActivity() {
         }
     }
 
+
     private fun displayCartItems(cartItems: List<CartModel>) {
         val adapter = OrderAdapter(cartItems)
         binding.rvOrder.layoutManager = LinearLayoutManager(this)
@@ -114,7 +120,7 @@ class OrderActivity : AppCompatActivity() {
             this,
             { _, selectedYear, selectedMonth, selectedDay ->
                 calendar.set(selectedYear, selectedMonth, selectedDay)
-                binding.etOrderDate.editText?.setText(dateFormat.format(calendar.time))
+                binding.orderDate.setText(dateFormat.format(calendar.time)) // Update date input directly
             },
             year,
             month,

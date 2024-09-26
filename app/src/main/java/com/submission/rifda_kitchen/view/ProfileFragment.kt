@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.submission.rifda_kitchen.admin.AdminActivity
 import com.submission.rifda_kitchen.databinding.FragmentProfileBinding
 import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.repository.Repository
@@ -37,6 +38,12 @@ class ProfileFragment : Fragment() {
         binding.btnSignOut.setOnClickListener {
             signOut()
         }
+        binding.btnEditProfile.setOnClickListener {
+            val intent = Intent(requireContext(), AdminActivity::class.java)
+            startActivity(intent)
+        }
+
+
         return binding.root
     }
 
