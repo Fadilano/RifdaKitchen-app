@@ -40,9 +40,7 @@ class ProfileFragment : Fragment() {
         binding.btnSignOut.setOnClickListener {
             signOut()
         }
-        binding.btnEditProfile.setOnClickListener {
 
-        }
 
         binding.btnAdminPanel.setOnClickListener {
             val intent = Intent(requireContext(), AdminActivity::class.java)
