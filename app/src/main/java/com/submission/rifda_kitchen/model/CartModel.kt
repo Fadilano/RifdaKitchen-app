@@ -9,5 +9,6 @@ import kotlinx.parcelize.Parcelize
 data class CartModel(
     var name: String? = null,
     var price: Int = 0,
+    var image_url: String? = null,
     var quantity: Int = 1
 ) : Parcelable

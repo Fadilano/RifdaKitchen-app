@@ -17,12 +17,29 @@
         android:theme="@style/Theme.RifdaKitchen"
         tools:replace="android:allowBackup"
         tools:targetApi="31">
-
         <activity
-            android:name=".admin.AdminActivity"
+            android:name=".view.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".admin.view.AddProductActivity"
             android:exported="false" />
         <activity
-            android:name=".admin.AdminOrderDetailActivity"
+            android:name=".admin.view.AdminProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.view.AdmiinOrderListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.view.AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.view.AdminOrderDetailActivity"
             android:exported="false" />
         <activity
             android:name=".view.OrderDetailActivity"
@@ -38,16 +55,25 @@
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".view.LoginActivity"
             android:exported="false" />
+
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
+        </service>
     </application>
 
 </manifest>

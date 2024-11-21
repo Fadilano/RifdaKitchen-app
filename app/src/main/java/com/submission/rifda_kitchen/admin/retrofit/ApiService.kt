@@ -4,8 +4,10 @@ import com.submission.rifda_kitchen.admin.model.PaymentLinkRequest
 import com.submission.rifda_kitchen.admin.model.PaymentLinkResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 
 interface ApiService {
@@ -15,4 +17,5 @@ interface ApiService {
     fun createPaymentLink(
         @Body paymentLinkRequest: PaymentLinkRequest
     ): Call<PaymentLinkResponse>
+
 }

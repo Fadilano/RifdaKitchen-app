@@ -2,19 +2,27 @@ package com.submission.rifda_kitchen.view
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.adapter.OrderAdapter
+import com.submission.rifda_kitchen.admin.retrofit.ApiClient
 import com.submission.rifda_kitchen.databinding.ActivityOrderDetailBinding
 import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.OrderModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OrderDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderDetailBinding
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOrderDetailBinding.inflate(layoutInflater)
@@ -53,4 +61,8 @@ class OrderDetailActivity : AppCompatActivity() {
         }
 
     }
+
+
+
+
 }

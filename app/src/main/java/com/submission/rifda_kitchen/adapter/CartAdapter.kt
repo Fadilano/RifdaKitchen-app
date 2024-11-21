@@ -25,7 +25,7 @@ class CartAdapter(
                 tvProductPrice.formatPrice(cartItem.price)
                 tvProductQuantity.text = cartItem.quantity.toString()
                 //change load
-                Glide.with(ivProduct.context).load(R.drawable.sample).into(ivProduct)
+                Glide.with(ivProduct.context).load(cartItem.image_url).into(ivProduct)
 
                 btnPlus.setOnClickListener {
                     updateQuantity(cartItem, cartItem.quantity + 1)

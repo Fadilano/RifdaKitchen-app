@@ -2,10 +2,11 @@ package com.submission.rifda_kitchen.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.submission.rifda_kitchen.admin.view.AdminProductListActivity
 import com.submission.rifda_kitchen.view.MakananBeratFragment
 import com.submission.rifda_kitchen.view.MakananRinganFragment
 
-class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class AdminViewPagerAdapter(activity: AdminProductListActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return 2
     }

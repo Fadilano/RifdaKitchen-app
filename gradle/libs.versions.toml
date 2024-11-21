@@ -14,6 +14,7 @@ firebaseAuth = "23.0.0"
 firebase-bom = "33.2.0"
 play-services-auth = "21.2.0"
 firebaseDatabase = "21.0.0"
+firebaseStorage = "21.0.0"
 credentials = "1.2.2"
 googleid = "1.1.0"
 navigationFragmentKtx = "2.7.7"
@@ -39,6 +40,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }

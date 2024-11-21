@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.submission.rifda_kitchen.BuildConfig
-import com.submission.rifda_kitchen.admin.AdminActivity
+import com.submission.rifda_kitchen.admin.view.AdminActivity
 import com.submission.rifda_kitchen.databinding.FragmentProfileBinding
 import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.repository.Repository

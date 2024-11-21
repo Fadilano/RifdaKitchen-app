@@ -22,7 +22,7 @@ class BestProductAdapter(
                 tvProductName.text = product.name
                 tvProductPrice.formatPrice(product.price)
                 Glide.with(ivProduct.context)
-                    .load(R.drawable.sample)
+                    .load(product.image_url)
                     .into(ivProduct)
                 ivProduct.setOnClickListener {
                     onItemClick(product)

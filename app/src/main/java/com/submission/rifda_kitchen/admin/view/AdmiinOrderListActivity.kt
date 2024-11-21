@@ -1,4 +1,4 @@
-package com.submission.rifda_kitchen.admin
+package com.submission.rifda_kitchen.admin.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,25 +9,24 @@ import com.submission.rifda_kitchen.adapter.HistoryAdapter
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModel
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModelFactory
 import com.submission.rifda_kitchen.admin.repository.AdminRepository
-import com.submission.rifda_kitchen.databinding.ActivityAdminBinding
+import com.submission.rifda_kitchen.databinding.ActivityAdmiinOrderListBinding
 import com.submission.rifda_kitchen.model.OrderModel
 
-class AdminActivity : AppCompatActivity() {
+class AdmiinOrderListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAdminBinding
+    private lateinit var binding: ActivityAdmiinOrderListBinding
     private lateinit var adminViewModel: AdminViewModel  // Initialize ViewModel later
     private val orderList = mutableListOf<OrderModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAdminBinding.inflate(layoutInflater)
+        binding = ActivityAdmiinOrderListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.adminToolbar)
-        supportActionBar?.title = ("Admin Panel")
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        setSupportActionBar(binding.OrderListToolbar)
+        supportActionBar?.title = ("Order List")
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Set up ViewModel after onCreate
         val repository = AdminRepository()
         val factory = AdminViewModelFactory(repository)
         adminViewModel = ViewModelProvider(this, factory)[AdminViewModel::class.java]
@@ -36,16 +35,10 @@ class AdminActivity : AppCompatActivity() {
             reverseLayout = true
             stackFromEnd = true
         }
-
         observeViewModel()
     }
 
-
     private fun observeViewModel() {
-        adminViewModel.getTotalOrders().observe(this) { totalOrders ->
-            binding.tvTotalOrders.text = "Total Orders: $totalOrders"
-        }
-
         adminViewModel.getAllOrders().observe(this) { orders ->
             orderList.clear()
             orderList.addAll(orders)

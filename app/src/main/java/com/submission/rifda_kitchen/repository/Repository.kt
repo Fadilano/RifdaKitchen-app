@@ -120,12 +120,14 @@ class Repository {
             is MakananBeratModel -> CartModel(
                 name = product.name,
                 price = product.price,
+                image_url = product.image_url,
                 quantity = quantity
             )
 
             is MakananRinganModel -> CartModel(
                 name = product.name,
                 price = product.price,
+                image_url = product.image_url,
                 quantity = quantity
             )
 
@@ -142,6 +144,7 @@ class Repository {
                 val cartData = mapOf(
                     "name" to cartItem.name,
                     "price" to cartItem.price,
+                    "image_url" to cartItem.image_url,
                     "quantity" to cartItem.quantity
                 )
                 cartRef.child(cartItem.name!!).setValue(cartData).addOnSuccessListener {

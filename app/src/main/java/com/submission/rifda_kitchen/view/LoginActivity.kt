@@ -5,14 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.submission.rifda_kitchen.BuildConfig
-import com.submission.rifda_kitchen.admin.AdminActivity
 import com.submission.rifda_kitchen.databinding.ActivityLoginBinding
 import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.viewModel.AuthViewmodel
 import com.submission.rifda_kitchen.viewModel.AuthViewmodelFactory
-import kotlinx.coroutines.launch
 
 
 class LoginActivity : AppCompatActivity() {

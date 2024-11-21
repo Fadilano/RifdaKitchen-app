@@ -75,7 +75,7 @@ class DetailActivity : AppCompatActivity() {
                     tvProductName.text = product.name
                     tvProductPrice.formatPrice(product.price)
                     tvProductDescription.text = product.description
-                    Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
+                    Glide.with(this@DetailActivity).load(product.image_url).into(ivProduct)
                     setupAddToCartButton(product)
                     supportActionBar?.title = product.name
                 }
@@ -85,7 +85,7 @@ class DetailActivity : AppCompatActivity() {
                     tvProductName.text = product.name
                     tvProductPrice.formatPrice(product.price)
                     tvProductDescription.text = product.description
-                    Glide.with(this@DetailActivity).load(R.drawable.sample).into(ivProduct)
+                    Glide.with(this@DetailActivity).load(product.image_url).into(ivProduct)
                     setupAddToCartButton(product)
                     supportActionBar?.title = product.name
                 }

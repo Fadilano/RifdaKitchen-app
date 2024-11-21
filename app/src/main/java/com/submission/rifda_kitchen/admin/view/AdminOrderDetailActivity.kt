@@ -1,4 +1,4 @@
-package com.submission.rifda_kitchen.admin
+package com.submission.rifda_kitchen.admin.view
 
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModel
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModelFactory
 import com.submission.rifda_kitchen.admin.model.CustomerDetails
+import com.submission.rifda_kitchen.admin.model.ItemDetails
 import com.submission.rifda_kitchen.admin.model.PaymentLinkRequest
 import com.submission.rifda_kitchen.admin.model.TransactionDetails
 import com.submission.rifda_kitchen.admin.repository.AdminRepository
@@ -85,7 +86,8 @@ class AdminOrderDetailActivity : AppCompatActivity() {
                 viewModel.updatePaymentLink(userId ?: "", orderId ?: "", link)
 
                 // Show a success message to the admin
-                Toast.makeText(this, "Payment link generated and updated!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Payment link generated and updated!", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -100,15 +102,24 @@ class AdminOrderDetailActivity : AppCompatActivity() {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createPaymentLinkRequest(order: OrderModel): PaymentLinkRequest {
+
+        val items = order.cartItems?.map { cartItem ->
+            ItemDetails(
+                name = cartItem.name!!,
+                price = cartItem.price,
+                quantity = cartItem.quantity
+            )
+        } ?: emptyList()
         return PaymentLinkRequest(
             payment_type = "bank_transfer",
             transaction_details = TransactionDetails(
                 order_id = orderId ?: "",
                 gross_amount = order.totalPrice
             ),
+            item_details = items,
+
             customer_details = CustomerDetails(
                 first_name = order.name!!,
                 email = order.email!!,
