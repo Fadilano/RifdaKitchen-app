@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "MIDTRANS_BASE_URL", "\"https://api.sandbox.midtrans.com/\"")
         buildConfigField("String", "SERVER_KEY", "\"SB-Mid-server-Zbsb-T_jALFkRUFnHZadfbd2\"")
-        buildConfigField("String", "ADMIN_KEY", "\"59G9E3ElfTgk1fInc4octGE2fw22\"")
+        buildConfigField("String", "ADMIN_KEY", "\"5Eszx9mJc1Sh8dEmu7LrZ4qlIf93\"")
 
 
     }

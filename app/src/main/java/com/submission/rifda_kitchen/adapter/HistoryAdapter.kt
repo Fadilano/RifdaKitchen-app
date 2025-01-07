@@ -15,13 +15,9 @@ class HistoryAdapter(
     inner class OrderViewHolder(val binding: HistoryItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(order: OrderModel) {
+            binding.tvCustName.text = order.name
             binding.tvOrderDate.text = order.date
-            val confirmationStatus = if (order.confirmationStatus) {
-                if (order.paymentStatus) "Pesanan di proses" else "Pesanan di konfirmasi, silahkan lakukan pembayaran"
-            } else {
-                "Menunggu konfirmasi"
-            }
-            binding.tvconfirmationStatus.text = confirmationStatus
+            binding.tvconfirmationStatus.text = order.orderStatus
             binding.btnToDetail.setOnClickListener {
                 onItemClick(order)
             }

@@ -13,3 +13,4 @@ private const val MAXIMAL_SIZE = 1000000
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
+

@@ -1,6 +1,7 @@
 package com.submission.rifda_kitchen.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,6 +22,15 @@ class ProductAdapter(
             binding.apply {
                 tvProductName.text = product.name
                 tvProductPrice.formatPrice(product.price)
+                tvProductStock.text = product.stock.toString()
+                if (product.stock > 0) {
+                    tvProductStock.visibility = View.VISIBLE
+                    tvProductStatus.visibility = View.GONE
+                } else {
+                    tvProductStock.visibility = View.GONE
+                    tvProductStatus.visibility = View.VISIBLE
+                    tvProductStatus.text = "Pre order"
+                }
                 Glide.with(ivProduct.context)
                     .load(product.image_url)
                     .into(ivProduct)

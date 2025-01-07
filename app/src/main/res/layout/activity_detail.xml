@@ -53,6 +53,32 @@
         app:layout_constraintTop_toBottomOf="@+id/tvProductName"
         tools:text="Rp.123102938" />
 
+
+
+    <TextView
+        android:id="@+id/stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Stock:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProductPrice" />
+
+    <TextView
+        android:id="@+id/tvProductStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stock"
+        app:layout_constraintStart_toEndOf="@+id/stock"
+        app:layout_constraintTop_toTopOf="@+id/stock"
+        tools:text="20" />
+
     <TextView
         android:id="@+id/deskripsi"
         android:layout_width="match_parent"
@@ -60,17 +86,17 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:text="Deskripsi Produk"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvProductPrice"
-        android:text="Deskripsi Produk" />
+        app:layout_constraintTop_toBottomOf="@+id/tvProductStock" />
 
     <TextView
         android:id="@+id/tvProductDescription"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -79,6 +105,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deskripsi"
         tools:text="DESKRIPSI PRODUK BLA BLA BLA BLA" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Masukan Jumlah Produk"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddToCart"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnMinus"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_plus"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="-"
+        app:layout_constraintBottom_toBottomOf="@+id/tvProductQuantity"
+        app:layout_constraintEnd_toStartOf="@+id/tvProductQuantity"
+        app:layout_constraintTop_toTopOf="@+id/tvProductQuantity" />
+
+    <TextView
+        android:id="@+id/tvProductQuantity"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_quantity"
+        android:backgroundTint="@color/md_theme_secondaryContainer"
+        android:gravity="center"
+        android:text="1"
+        app:layout_constraintBottom_toBottomOf="@+id/btnPlus"
+        app:layout_constraintEnd_toStartOf="@+id/btnPlus"
+        app:layout_constraintTop_toTopOf="@+id/btnPlus" />
+
+    <Button
+        android:id="@+id/btnPlus"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_plus"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="+"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddToCart"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <Button
         android:id="@+id/btnAddToCart"

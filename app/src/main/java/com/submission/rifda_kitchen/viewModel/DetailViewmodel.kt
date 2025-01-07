@@ -19,6 +19,8 @@ class DetailViewmodel(private val repository: Repository) : ViewModel() {
 
     private val _addToCartSuccess = MutableLiveData<String?>()
     val addToCartSuccess: LiveData<String?> = _addToCartSuccess
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
 
     fun setMakananBerat(makananBerat: MakananBeratModel?) {
         _makananBeratLiveData.value = makananBerat
@@ -28,13 +30,23 @@ class DetailViewmodel(private val repository: Repository) : ViewModel() {
         _makananRinganLiveData.value = makananRingan
     }
 
+
+    fun updateOrderStatus(userId: String, orderId: String, status: String) {
+        repository.cancelOrder(userId, orderId, status) { success ->
+            if (!success) {
+                _errorMessage.value = "Gagal membatalkan Pesanan"
+            }
+        }
+    }
+
+
     fun addToCart(product: Any, quantity: Int) {
         viewModelScope.launch {
             try {
                 repository.addToCart(product, quantity) { result ->
                     _addToCartSuccess.value = result
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 _addToCartSuccess.value = "Error adding to cart"
             }
         }

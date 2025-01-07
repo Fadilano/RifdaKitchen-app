@@ -1,5 +1,6 @@
 package com.submission.rifda_kitchen.admin.repository
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
@@ -9,16 +10,21 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import com.submission.rifda_kitchen.admin.model.PaymentLinkRequest
 import com.submission.rifda_kitchen.admin.model.PaymentLinkResponse
 import com.submission.rifda_kitchen.admin.retrofit.ApiClient
+import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.OrderModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
+import java.util.UUID
 
 class AdminRepository {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     // Fetch the list of orders from Firebase
     fun getAllOrders(): LiveData<List<OrderModel>> {
@@ -44,28 +50,39 @@ class AdminRepository {
         return ordersLiveData
     }
 
-
-    fun getTotalOrders(): LiveData<Long> {
-        val totalOrdersLiveData = MutableLiveData<Long>()
-
-        database.child("orders").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                totalOrdersLiveData.value = snapshot.childrenCount
+    fun uploadImage(imageUri: Uri, onComplete: (String?) -> Unit) {
+        val storageRef = storage.reference.child("products/${UUID.randomUUID()}")
+        storageRef.putFile(imageUri).addOnSuccessListener {
+            storageRef.downloadUrl.addOnSuccessListener { imageUrl ->
+                onComplete(imageUrl.toString())
+            }.addOnFailureListener {
+                onComplete(null)
             }
+        }.addOnFailureListener {
+            onComplete(null)
+        }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
-
-        return totalOrdersLiveData
+    fun saveProductToDatabase(product: Any, category: String, onComplete: (Boolean) -> Unit) {
+        val productRef = database.child("products").child(category).child((product as MakananBeratModel).name.lowercase(
+            Locale.getDefault()))
+        productRef.setValue(product).addOnCompleteListener { task ->
+            onComplete(task.isSuccessful)
+        }
     }
 
 
-    fun updateConfirmationStatus(userId: String, orderId: String, confirmed: Boolean, onComplete: (Boolean) -> Unit) {
+
+    fun updateOrderStatus(userId: String, orderId: String, status: String, clearPaymentLink: Boolean, callback: (Boolean) -> Unit) {
+        val updateData = mutableMapOf<String, Any>(
+            "orderStatus" to status
+        )
+        if (clearPaymentLink) {
+            updateData["paymentLink"] = ""
+        }
         val orderRef = database.child("orders").child(userId).child(orderId)
-        orderRef.child("confirmationStatus").setValue(confirmed).addOnCompleteListener {
-            onComplete(it.isSuccessful)
+        orderRef.updateChildren(updateData).addOnCompleteListener { task ->
+            callback(task.isSuccessful)
         }
     }
 

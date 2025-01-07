@@ -77,9 +77,8 @@ class OrderActivity : AppCompatActivity() {
                     phone = custPhone,
                     date = orderDate,
                     email = custEmail,
-                    confirmationStatus = false,
-                    paymentStatus = false,
-                    paymentLink = ""
+                    paymentLink = "",
+                    orderStatus = "Menunggu Konfirmasi"
                 )
                 orderViewmodel.saveOrder(order)
                 if (userId != null) {
@@ -140,6 +139,13 @@ class OrderActivity : AppCompatActivity() {
             month,
             day
         )
+
+        // Get current date in milliseconds
+        val currentDateInMillis = System.currentTimeMillis()
+
+        // Set the minimum date to current date to prevent selecting past dates
+        datePicker.datePicker.minDate = currentDateInMillis
+
         datePicker.show()
     }
 }

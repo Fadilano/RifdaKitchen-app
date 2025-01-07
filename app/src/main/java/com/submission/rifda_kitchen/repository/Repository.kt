@@ -238,6 +238,15 @@ class Repository {
         userRef.child(userId).child("phone").setValue(phone)
         userRef.child(userId).child("address").setValue(address)
     }
+    fun cancelOrder(userId: String, orderId: String, status: String, callback: (Boolean) -> Unit) {
+        val updateData = mutableMapOf<String, Any>(
+            "orderStatus" to status
+        )
+        val orderRef = database.child("orders").child(userId).child(orderId)
+        orderRef.updateChildren(updateData).addOnCompleteListener { task ->
+            callback(task.isSuccessful)
+        }
+    }
 
 }
 

@@ -1,5 +1,6 @@
 package com.submission.rifda_kitchen
 
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.icu.text.DecimalFormat
@@ -10,11 +11,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.submission.rifda_kitchen.model.CartModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -34,6 +31,16 @@ object Helper {
 
     fun showLoading(isLoading: Boolean, progressBar: ProgressBar) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    fun showDialog(context: Context, title: String, message: String) {
+        AlertDialog.Builder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"

@@ -24,9 +24,19 @@ class AdminActivity : AppCompatActivity() {
         }
 
         binding.btnListOrder.setOnClickListener {
-            val intent = Intent(this, AdmiinOrderListActivity::class.java)
+            val intent = Intent(this, AdminOrderListActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnAddProduct.setOnClickListener {
+            val intent = Intent(this, AddProductActivity::class.java)
             startActivity(intent)
         }
 
     }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 }

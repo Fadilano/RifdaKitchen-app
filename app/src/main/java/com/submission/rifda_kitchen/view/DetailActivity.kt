@@ -1,12 +1,8 @@
 package com.submission.rifda_kitchen.view
 
 import android.os.Bundle
-import android.text.InputType
-import android.widget.EditText
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -16,14 +12,17 @@ import com.submission.rifda_kitchen.databinding.ActivityDetailBinding
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.repository.Repository
-import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 import com.submission.rifda_kitchen.viewModel.DetailViewmodel
+import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private val repository = Repository()
-    private val detailViewModel : DetailViewmodel by viewModels{ ViewmodelFactory(repository) }
+    private val detailViewModel: DetailViewmodel by viewModels { ViewmodelFactory(repository) }
+
+    private var quantity = 1 // Default quantity
+    private var maxStock = 0 // Untuk menyimpan stok maksimum produk
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +39,10 @@ class DetailActivity : AppCompatActivity() {
         }
 
         observeViewModel()
-
         setSupportActionBar(binding.toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
+        setupQuantityButtons() // Atur logika tombol plus dan minus
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -53,14 +50,19 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-
     private fun observeViewModel() {
         detailViewModel.makananBeratLiveData.observe(this, Observer { makananBerat ->
-            makananBerat?.let { bindProductDetails(it) }
+            makananBerat?.let {
+                maxStock = it.stock
+                bindProductDetails(it)
+            }
         })
 
         detailViewModel.makananRinganLiveData.observe(this, Observer { makananRingan ->
-            makananRingan?.let { bindProductDetails(it) }
+            makananRingan?.let {
+                maxStock = it.stock
+                bindProductDetails(it)
+            }
         })
 
         detailViewModel.addToCartSuccess.observe(this, Observer { message ->
@@ -74,9 +76,9 @@ class DetailActivity : AppCompatActivity() {
                 binding.apply {
                     tvProductName.text = product.name
                     tvProductPrice.formatPrice(product.price)
+                    tvProductStock.text = product.stock.toString()
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(product.image_url).into(ivProduct)
-                    setupAddToCartButton(product)
                     supportActionBar?.title = product.name
                 }
             }
@@ -84,44 +86,43 @@ class DetailActivity : AppCompatActivity() {
                 binding.apply {
                     tvProductName.text = product.name
                     tvProductPrice.formatPrice(product.price)
+                    tvProductStock.text = product.stock.toString()
                     tvProductDescription.text = product.description
                     Glide.with(this@DetailActivity).load(product.image_url).into(ivProduct)
-                    setupAddToCartButton(product)
                     supportActionBar?.title = product.name
                 }
             }
         }
     }
 
-    private fun setupAddToCartButton(product: Any) {
-        binding.btnAddToCart.setOnClickListener {
-            showQuantityInputDialog(product)
-        }
-    }
+    private fun setupQuantityButtons() {
+        binding.apply {
+            tvProductQuantity.text = quantity.toString()
 
-    private fun showQuantityInputDialog(product: Any) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Masukan Jumlah Produk")
+            btnPlus.setOnClickListener {
+                if (quantity < maxStock) {
+                    quantity++
+                    tvProductQuantity.text = quantity.toString()
+                } else {
+                    Toast.makeText(this@DetailActivity, "Stok maksimum tercapai", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        val input = EditText(this)
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
+            btnMinus.setOnClickListener {
+                if (quantity > 1) {
+                    quantity--
+                    tvProductQuantity.text = quantity.toString()
+                } else {
+                    Toast.makeText(this@DetailActivity, "Jumlah minimum adalah 1", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        builder.setPositiveButton("OK") { _, _ ->
-            val quantityString = input.text.toString()
-            val quantity = quantityString.toIntOrNull()
-
-            if (quantity == null || quantity <= 0) {
-                Toast.makeText(this, "Masukan jumlah yang sesuai", Toast.LENGTH_SHORT).show()
-            } else {
-                detailViewModel.addToCart(product, quantity)
+            btnAddToCart.setOnClickListener {
+                val product = detailViewModel.makananBeratLiveData.value ?: detailViewModel.makananRinganLiveData.value
+                product?.let {
+                    detailViewModel.addToCart(it, quantity)
+                }
             }
         }
-
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        builder.show()
     }
 }

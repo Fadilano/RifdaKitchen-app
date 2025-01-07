@@ -16,7 +16,6 @@ data class OrderModel(
     var phone: String? = null,
     var date: String? = null,
     var email: String? = null,
-    var confirmationStatus: Boolean = false,
-    var paymentStatus: Boolean = false,
     var paymentLink: String? = null,
+    var orderStatus: String = "Menunggu Konfirmasi"
     ) : Parcelable

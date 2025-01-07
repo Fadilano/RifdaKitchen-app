@@ -2,8 +2,8 @@ package com.submission.rifda_kitchen.admin.view
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.adapter.HistoryAdapter
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModel
@@ -12,10 +12,13 @@ import com.submission.rifda_kitchen.admin.repository.AdminRepository
 import com.submission.rifda_kitchen.databinding.ActivityAdmiinOrderListBinding
 import com.submission.rifda_kitchen.model.OrderModel
 
-class AdmiinOrderListActivity : AppCompatActivity() {
+class AdminOrderListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdmiinOrderListBinding
-    private lateinit var adminViewModel: AdminViewModel  // Initialize ViewModel later
+    private val repository = AdminRepository()
+    private val adminViewModel: AdminViewModel by viewModels { AdminViewModelFactory(repository) }
+
+    // Initialize ViewModel later
     private val orderList = mutableListOf<OrderModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +30,6 @@ class AdmiinOrderListActivity : AppCompatActivity() {
         supportActionBar?.title = ("Order List")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val repository = AdminRepository()
-        val factory = AdminViewModelFactory(repository)
-        adminViewModel = ViewModelProvider(this, factory)[AdminViewModel::class.java]
 
         binding.rvOrders.layoutManager = LinearLayoutManager(this).apply {
             reverseLayout = true
@@ -55,5 +55,9 @@ class AdmiinOrderListActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.rvOrders.adapter = adapter
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

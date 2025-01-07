@@ -1,72 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    style="@style/Widget.Material3.CardView.Filled"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
     android:layout_marginHorizontal="16dp"
-    app:cardCornerRadius="16dp"
-    android:background="@color/md_theme_secondaryContainer">
+    android:layout_marginVertical="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_secondaryContainer"
+        android:background="@color/md_theme_primaryContainer"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tvTitleDate"
+            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order :"
+            android:text="Nama Pemesan:"
+            android:textColor="@color/md_theme_onPrimaryContainer"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvOrderDate"
+            android:id="@+id/tvCustName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:textColor="@color/md_theme_onSecondaryContainer"
-            app:layout_constraintBottom_toBottomOf="@+id/tvTitleDate"
-            app:layout_constraintStart_toEndOf="@+id/tvTitleDate"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginLeft="8dp"
+            android:text="Fadilano Abraham"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView7"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toTopOf="@+id/textView7" />
 
         <TextView
-            android:id="@+id/tvTitleConfirmationStatus"
+            android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Status : "
+            android:text="Order untuk tanggal:"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tvTitleDate"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitleDate" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/tvOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="20/20/2002"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintStart_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Total Harga: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Rp.20.000"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintStart_toEndOf="@+id/textView10"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Status:"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
 
         <TextView
             android:id="@+id/tvconfirmationStatus"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="8dp"
             android:maxLines="2"
-            android:textColor="@color/md_theme_onSecondaryContainer"
-            app:layout_constraintBottom_toBottomOf="@+id/tvTitleConfirmationStatus"
-            app:layout_constraintStart_toEndOf="@+id/tvTitleConfirmationStatus"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitleDate" />
-
-        <ImageView
-            android:id="@+id/btnToDetail"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_arrow_forward_ios_24"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Pesanan Dikonfirmasi, Silahkan lakukan pembayaran"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnToDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Detail Pesanan"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvconfirmationStatus" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -65,6 +65,8 @@ class HistoryFragment : Fragment() {
     private fun navigateToOrderDetail(order: OrderModel) {
         val intent = Intent(requireContext(), OrderDetailActivity::class.java).apply {
             putExtra("order", order)
+            putExtra("userId", order.userId)
+            putExtra("orderId", order.orderId)
         }
         startActivity(intent)
     }

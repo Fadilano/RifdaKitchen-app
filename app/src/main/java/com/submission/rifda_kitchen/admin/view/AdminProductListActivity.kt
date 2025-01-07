@@ -18,7 +18,7 @@ class AdminProductListActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.ProductListToolbar)
         supportActionBar?.title = ("Products")
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val adapter = AdminViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
@@ -35,5 +35,9 @@ class AdminProductListActivity : AppCompatActivity() {
             val intent = Intent(this, AddProductActivity::class.java)
             startActivity(intent)
         }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

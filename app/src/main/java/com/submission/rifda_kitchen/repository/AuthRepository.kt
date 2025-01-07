@@ -16,6 +16,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.submission.rifda_kitchen.R
@@ -113,6 +114,47 @@ class AuthRepository {
             }
         }
     }
+    suspend fun signInWithEmail(email: String, password: String): Boolean {
+        return try {
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            val user = authResult.user
+            if (user != null) {
+                val uid = user.uid
+                val name = user.displayName ?: "Unknown Name" // Default jika nama tidak ada
+                val photoUrl = "Unknown Photo Url" // Default jika tidak ada input foto
+                saveUserData(uid, name, email, photoUrl)
+            }
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Login failed: ${e.message}", e)
+            false
+        }
+    }
+
+    suspend fun signUpWithEmail(name: String, email: String, password: String): Boolean {
+        return try {
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val user = authResult.user
+            if (user != null) {
+                val uid = user.uid
+                // Simpan data user ke database
+                val photoUrl = "Unknown Photo Url" // Default jika tidak ada input foto
+                saveUserData(uid, name, email, photoUrl)
+
+                // Update displayName di Firebase Authentication (opsional)
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+                user.updateProfile(profileUpdates).await()
+            }
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Registration failed: ${e.message}", e)
+            false
+        }
+    }
+
+
 
     companion object {
         private const val TAG = "AuthRepository"

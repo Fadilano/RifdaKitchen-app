@@ -20,20 +20,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <!-- Order Title -->
-        <TextView
-            android:id="@+id/tvOrderDetailTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Order Detail"
-            android:textSize="24sp"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/adminDetailToolbar" />
-
         <!-- RecyclerView for Order Items -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAdminOrderItems"
@@ -44,162 +30,262 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvOrderDetailTitle" />
+            app:layout_constraintTop_toBottomOf="@id/adminDetailToolbar" />
 
         <!-- Customer Info -->
         <TextView
-            android:id="@+id/tvAdminCustomerInfo"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16sp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
             android:text="Customer Detail"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvAdminOrderItems" />
+            app:layout_constraintTop_toBottomOf="@+id/rvAdminOrderItems"
+            tools:layout_editor_absoluteX="16dp" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/tvAdminCustomerInfo">
-            <TextView
-                android:id="@+id/tvName"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView4">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:text="Nama :"
-                android:textSize="16sp"
-                android:textStyle="italic|bold" />
-            <TextView
-                android:id="@+id/tvAdminCustomerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:text="nama user"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminCustomerInfo" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvPhone"
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Nama :"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvCustName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="CUSTOMER NAME" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:text="Nomor Telepon:"
-                android:textSize="16sp"
-                android:textStyle="italic|bold" />
-            <TextView
-                android:id="@+id/tvAdminCustomerPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:text="1234567890"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminCustomerName" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvAddress"
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Nomor Telepon:"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvCustPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="098123019238" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:text="Alamat :"
-                android:textSize="16sp"
-                android:textStyle="italic|bold" />
-            <TextView
-                android:id="@+id/tvAdminCustomerAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:text="Address: Sample Address"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminCustomerPhone" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvStatus"
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Alamat :"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvCustAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="JL.raya eg" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:text="Status Pesanan:"
-                android:textSize="16sp"
-                android:textStyle="italic|bold" />
-            <!-- Confirmation Status -->
-            <TextView
-                android:id="@+id/tvAdminOrderStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:text="Confirmation Status: Pending"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminCustomerAddress" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tvOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Tanggal Pesanan"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
 
-            <Button
-                android:id="@+id/btnUpdateStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:layout_marginTop="8dp"
-                android:text="Confirm Order"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminOrderStatus" />
+                <TextView
+                    android:id="@+id/tvOrderDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="24/09/02" />
 
-            <TextView
-                android:id="@+id/tvPayment"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:text="Status Pembayaran:"
-                android:textSize="16sp"
-                android:textStyle="italic|bold" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvPaymentStatus"
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Status Pesanan:"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvOrderStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="Menunggu konfirmasi" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                tools:text="Belum Bayar" />
-            <!-- Payment Link Section -->
-            <TextView
-                android:id="@+id/tvAdminPaymentLinkTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:layout_marginTop="16dp"
-                android:text="Payment Link"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnUpdateStatus" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/etPaymentLink"
+                <TextView
+                    android:id="@+id/tvPayment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Status Pembayaran:"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+
+                <TextView
+                    android:id="@+id/tvPaymentStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="Belum Bayar" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16sp"
-                android:layout_marginTop="8dp"
-                android:hint="PaymentLink"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAdminPaymentLinkTitle" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Total Harga:"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvOrderTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="RP.10291029129" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <Button
                 android:id="@+id/btnGeneratePaymentLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16sp"
-                android:layout_marginTop="8dp"
-                android:text="Generate Payment Link"
+                android:text="Terima Pesanan"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etPaymentLink" />
+                app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+            <Button
+                android:id="@+id/btnProses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16sp"
+                android:text="Proses Pesanan"
+                app:layout_constraintBottom_toBottomOf="@+id/btnGeneratePaymentLink"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnGeneratePaymentLink" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/md_theme_error"
+            android:text="Batalkan Pesanan"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn" />
+
+        <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/md_theme_secondary"
+            android:text="Pesanan Selesai"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnCancel" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

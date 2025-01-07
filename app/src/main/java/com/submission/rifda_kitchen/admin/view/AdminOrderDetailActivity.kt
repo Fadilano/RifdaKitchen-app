@@ -41,34 +41,20 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         order = intent.getParcelableExtra("order")
 
         setSupportActionBar(binding.adminDetailToolbar)
-        supportActionBar?.title = ("Admin Panel")
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.title = ("Order Detail")
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         order?.let {
             displayOrderDetails(it)
         }
 
         // Observing ViewModel LiveData
-        viewModel.confirmationStatusUpdated.observe(this) { success ->
-            if (success) {
-                val newStatus = !(order?.confirmationStatus ?: false)
-                binding.tvAdminOrderStatus.text = if (newStatus) "Confirmed" else "Pending"
-            }
-        }
-
-        viewModel.paymentLinkCreated.observe(this) { link ->
-            binding.etPaymentLink.setText(link)
-        }
 
         viewModel.errorMessage.observe(this) { message ->
             Log.e("AdminOrderDetailActivity", message)
         }
 
         // Event handlers
-        binding.btnUpdateStatus.setOnClickListener {
-            val newStatus = !(order?.confirmationStatus ?: false)
-            viewModel.updateConfirmationStatus(userId ?: "", orderId ?: "", newStatus)
-        }
 
         binding.btnGeneratePaymentLink.setOnClickListener {
             order?.let {
@@ -79,9 +65,6 @@ class AdminOrderDetailActivity : AppCompatActivity() {
 
         viewModel.paymentLinkCreated.observe(this) { link ->
             if (!link.isNullOrEmpty()) {
-                // Display the payment link
-                binding.etPaymentLink.setText(link)
-
                 // Update the payment link in Firebase
                 viewModel.updatePaymentLink(userId ?: "", orderId ?: "", link)
 
@@ -90,15 +73,36 @@ class AdminOrderDetailActivity : AppCompatActivity() {
                     .show()
             }
         }
+
+        binding.btnGeneratePaymentLink.setOnClickListener {
+            order?.let {
+                val paymentRequest = createPaymentLinkRequest(it)
+                viewModel.createPaymentLink(paymentRequest)
+                updateOrderStatus("Pesanan Dikonfirmasi, silahkan lakukan pembayaran")
+            }
+        }
+
+        binding.btnProses.setOnClickListener {
+            updateOrderStatus("Pesanan Diproses")
+        }
+
+        binding.btnCancel.setOnClickListener {
+            updateOrderStatus("Pesanan dibatalkan", clearPaymentLink = true)
+        }
+
+        binding.btnFinish.setOnClickListener {
+            updateOrderStatus("Pesanan selesai")
+        }
+
     }
 
     // Helper function to display order details
     private fun displayOrderDetails(order: OrderModel) {
-        binding.tvAdminCustomerName.text = order.name
-        binding.tvAdminCustomerPhone.text = order.phone
-        binding.tvAdminCustomerAddress.text = order.address
-        binding.tvAdminOrderStatus.text = if (order.confirmationStatus) "Confirmed" else "Pending"
-        binding.etPaymentLink.setText(order.paymentLink ?: "")
+        binding.tvCustName.text = order.name
+        binding.tvCustPhone.text = order.phone
+        binding.tvCustAddress.text = order.address
+        binding.tvOrderDate.text = order.date
+        binding.tvOrderStatus.text = order.orderStatus
     }
 
 
@@ -126,6 +130,20 @@ class AdminOrderDetailActivity : AppCompatActivity() {
                 phone = order.phone!!
             )
         )
+    }
+
+    private fun updateOrderStatus(newStatus: String, clearPaymentLink: Boolean = false) {
+        order?.let {
+            viewModel.updateOrderStatus(userId ?: "", orderId ?: "", newStatus, clearPaymentLink)
+            binding.tvOrderStatus.text = newStatus
+            Toast.makeText(this, "Status pesanan diperbarui ke: $newStatus", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
 
