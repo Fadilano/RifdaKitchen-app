@@ -21,7 +21,7 @@ class HistoryViewmodel(private val repository: Repository) : ViewModel() {
             _isLoading.value = true
             try {
                 repository.fetchOrdersForUser(userUID) { orders ->
-                    _orderList.postValue(orders)
+                    _orderList.postValue(orders) // Perbarui data di LiveData
                     _isLoading.value = false
                 }
             } catch (e: Exception) {
@@ -29,4 +29,5 @@ class HistoryViewmodel(private val repository: Repository) : ViewModel() {
             }
         }
     }
+
 }

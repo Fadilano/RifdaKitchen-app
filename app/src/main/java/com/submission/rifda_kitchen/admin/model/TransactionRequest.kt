@@ -4,7 +4,8 @@ data class PaymentLinkRequest(
     val payment_type: String,
     val transaction_details: TransactionDetails,
     val item_details: List<ItemDetails>,
-    val customer_details: CustomerDetails
+    val customer_details: CustomerDetails,
+    val custom_field1: String
 )
 
 data class TransactionDetails(

@@ -11,4 +11,5 @@ data class UserModel(
     var photo_url: String? = "",
     var phone: String? = null,
     var address: String? = null,
+    val role: String = "User"
 ) : Parcelable

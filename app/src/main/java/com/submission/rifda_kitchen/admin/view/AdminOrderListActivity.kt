@@ -1,11 +1,10 @@
 package com.submission.rifda_kitchen.admin.view
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.submission.rifda_kitchen.adapter.HistoryAdapter
+import com.google.android.material.tabs.TabLayoutMediator
+import com.submission.rifda_kitchen.adapter.AdminOrderViewPagerAdapter
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModel
 import com.submission.rifda_kitchen.admin.ViewModel.AdminViewModelFactory
 import com.submission.rifda_kitchen.admin.repository.AdminRepository
@@ -30,34 +29,38 @@ class AdminOrderListActivity : AppCompatActivity() {
         supportActionBar?.title = ("Order List")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val adapter = AdminOrderViewPagerAdapter(this)
+        binding.viewPager.adapter = adapter
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Menunggu Konfirmasi"
+                1 -> "Menunggu Pembayaran"
+                2 -> "Pesanan Diproses"
+                3 -> "Pesanan Selesai"
+                else -> null
+            }
+        }.attach()
 
-        binding.rvOrders.layoutManager = LinearLayoutManager(this).apply {
-            reverseLayout = true
-            stackFromEnd = true
-        }
-        observeViewModel()
+
     }
 
-    private fun observeViewModel() {
-        adminViewModel.getAllOrders().observe(this) { orders ->
-            orderList.clear()
-            orderList.addAll(orders)
-            setupOrderAdapter()
-        }
-    }
-
-    private fun setupOrderAdapter() {
-        val adapter = HistoryAdapter(orderList) { order ->
-            val intent = Intent(this, AdminOrderDetailActivity::class.java)
-            intent.putExtra("order", order)
-            intent.putExtra("userId", order.userId)
-            intent.putExtra("orderId", order.orderId)
-            startActivity(intent)
-        }
-        binding.rvOrders.adapter = adapter
-    }
     override fun onSupportNavigateUp(): Boolean {
+        // Memanggil onBackPressed untuk menavigasi kembali dan me-refresh data
         onBackPressed()
         return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Menyegarkan data setelah kembali
+        refreshOrderList()
+    }
+
+    private fun refreshOrderList() {
+        // Dapatkan fragment yang sedang aktif dan lakukan refresh data
+        val fragment = supportFragmentManager.findFragmentById(binding.viewPager.id)
+        if (fragment is AdminOrderListFragment) {
+            fragment.refreshRecyclerView()
+        }
     }
 }

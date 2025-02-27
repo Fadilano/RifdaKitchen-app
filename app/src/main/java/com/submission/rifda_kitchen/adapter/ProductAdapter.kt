@@ -23,13 +23,22 @@ class ProductAdapter(
                 tvProductName.text = product.name
                 tvProductPrice.formatPrice(product.price)
                 tvProductStock.text = product.stock.toString()
-                if (product.stock > 0) {
-                    tvProductStock.visibility = View.VISIBLE
-                    tvProductStatus.visibility = View.GONE
-                } else {
+                if (product.status == "pre-order") {
+                    // Produk pre-order
                     tvProductStock.visibility = View.GONE
                     tvProductStatus.visibility = View.VISIBLE
-                    tvProductStatus.text = "Pre order"
+                    tvProductStatus.text = "pre-order"
+                } else {
+                    // Produk yang tersedia
+                    if (product.stock > 0) {
+                        tvProductStock.visibility = View.VISIBLE
+                        tvProductStatus.visibility = View.GONE
+                        tvProductStock.text = product.stock.toString()
+                    } else {
+                        tvProductStock.visibility = View.GONE
+                        tvProductStatus.visibility = View.VISIBLE
+                        tvProductStatus.text = "pre-order"
+                    }
                 }
                 Glide.with(ivProduct.context)
                     .load(product.image_url)

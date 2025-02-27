@@ -67,10 +67,13 @@ class CartFragment : Fragment() {
         cartViewModel.cartItemList.observe(viewLifecycleOwner) { cartItems ->
             if (cartItems != null) {
                 if (cartItems.isNotEmpty()) {
-                    cartAdapter.updateList(cartItems)
+                    cartAdapter.updateList(cartItems) // Perbarui adapter dengan data baru
+                    binding.rvProduct.visibility = View.VISIBLE
+                    binding.tvNoItem.visibility = View.GONE
                 } else {
-                    Log.d("CartViewModel", "No items in cart")
+                    binding.rvProduct.visibility = View.GONE
                     binding.tvNoItem.visibility = View.VISIBLE
+                    binding.btnCheckout.visibility = View.GONE
                 }
             }
         }
@@ -82,12 +85,8 @@ class CartFragment : Fragment() {
         cartViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
-        
-        cartViewModel.quantityUpdateMessage.observe(viewLifecycleOwner) { message ->
-            Log.d("CartViewModel", "Quantity update message: $message")
-
-        }
     }
+
 
     private fun navigateToOrderActivity() {
         cartViewModel.cartItemList.value?.let { cartItems ->
@@ -108,6 +107,13 @@ class CartFragment : Fragment() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        cartViewModel.fetchCartItems()
+        cartViewModel.getTotalPrice()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

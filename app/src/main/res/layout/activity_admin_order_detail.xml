@@ -25,9 +25,9 @@
             android:id="@+id/rvAdminOrderItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="8sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/adminDetailToolbar" />
@@ -65,8 +65,8 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="Nama :"
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
@@ -75,8 +75,9 @@
                     android:id="@+id/tvCustName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     tools:text="CUSTOMER NAME" />
             </LinearLayout>
 
@@ -90,8 +91,9 @@
                     android:id="@+id/tvPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     android:text="Nomor Telepon:"
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
@@ -100,8 +102,8 @@
                     android:id="@+id/tvCustPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
                     tools:text="098123019238" />
             </LinearLayout>
 
@@ -115,8 +117,9 @@
                     android:id="@+id/tvAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     android:text="Alamat :"
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
@@ -125,8 +128,9 @@
                     android:id="@+id/tvCustAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     tools:text="JL.raya eg" />
             </LinearLayout>
 
@@ -139,9 +143,10 @@
                     android:id="@+id/tvOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
-                    android:text="Tanggal Pesanan"
+
+                    android:layout_marginTop="8dp"
+                    android:text="Tanggal Pesanan: "
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
 
@@ -149,8 +154,9 @@
                     android:id="@+id/tvOrderDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     tools:text="24/09/02" />
 
             </LinearLayout>
@@ -161,11 +167,40 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
+                    android:text="Pesanan untuk Jam: "
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+                <TextView
+                    android:id="@+id/tvOrderTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
+                    tools:text="04.00" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     android:text="Status Pesanan:"
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
@@ -174,35 +209,12 @@
                     android:id="@+id/tvOrderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     tools:text="Menunggu konfirmasi" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvPayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:text="Status Pembayaran:"
-                    android:textSize="16sp"
-                    android:textStyle="italic|bold" />
-
-
-                <TextView
-                    android:id="@+id/tvPaymentStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginLeft="16dp"
-                    tools:text="Belum Bayar" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -213,8 +225,9 @@
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     android:text="Total Harga:"
                     android:textSize="16sp"
                     android:textStyle="italic|bold" />
@@ -223,8 +236,9 @@
                     android:id="@+id/tvOrderTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
                     android:layout_marginLeft="16dp"
+
+                    android:layout_marginTop="8dp"
                     tools:text="RP.10291029129" />
             </LinearLayout>
 
@@ -242,7 +256,7 @@
 
             <Button
                 android:id="@+id/btnGeneratePaymentLink"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16sp"
                 android:text="Terima Pesanan"
@@ -251,9 +265,10 @@
 
             <Button
                 android:id="@+id/btnProses"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16sp"
+                android:visibility="gone"
                 android:text="Proses Pesanan"
                 app:layout_constraintBottom_toBottomOf="@+id/btnGeneratePaymentLink"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -282,7 +297,7 @@
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/md_theme_secondary"
             android:text="Pesanan Selesai"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnCancel" />

@@ -87,20 +87,37 @@
             android:textAlignment="center"
             android:textSize="20sp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAdminPanel"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textSize="14sp"
             android:layout_marginHorizontal="16dp"
             android:visibility="gone"
-            android:padding="8dp"
-            android:text="Admin Panel" />
+            android:text="Admin dashboard" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOrvaPanel"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:text="Order Validator Panel" />
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignOut"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:backgroundTint="@color/md_theme_primary"
+            android:textColor="@color/md_theme_onPrimary"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="16dp"
             android:padding="8dp"

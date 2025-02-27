@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     app:cardElevation="4dp"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="8dp"
@@ -43,11 +43,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
             android:textColor="@color/md_theme_onPrimaryContainer"
             android:textSize="14sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="2dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvProductName"
             tools:text="Rp.40,000" />
@@ -58,8 +58,8 @@
             android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_quantity_list"
-            android:textColor="@color/md_theme_onPrimary"
             android:gravity="center"
+            android:textColor="@color/md_theme_onPrimary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,76 +70,69 @@
             android:id="@+id/tvProductStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textColor="@color/md_theme_onSecondaryContainer"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textColor="@color/md_theme_onSecondaryContainer"
+            android:textSize="12sp"
             android:textStyle="italic"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivProduct"
+            app:layout_constraintStart_toStartOf="@+id/tvProductPrice"
+            app:layout_constraintTop_toBottomOf="@+id/tvProductPrice"
             tools:text="Pre-Order" />
 
 
+        <!--        <ImageView-->
+        <!--            android:id="@+id/ivProduct"-->
+        <!--            android:layout_width="76dp"-->
+        <!--            android:layout_height="76dp"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            android:layout_marginBottom="8dp"-->
+        <!--            android:background="@drawable/image_corner"-->
+        <!--            android:clipToOutline="true"-->
+        <!--            android:scaleType="fitCenter"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:src="@tools:sample/avatars" />-->
 
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvProductName"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginTop="24dp"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/ivProduct"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:text="Risol Mayo"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:textColor="@color/md_theme_onPrimaryContainer"-->
+        <!--            android:textStyle="bold"/>-->
 
-
-
-
-
-
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvProductPrice"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginBottom="24dp"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:textStyle="italic"-->
+        <!--            android:textColor="@color/md_theme_onPrimaryContainer"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/ivProduct"-->
+        <!--            tools:text="Rp.40,000" />-->
 
         <!--        <ImageView-->
-<!--            android:id="@+id/ivProduct"-->
-<!--            android:layout_width="76dp"-->
-<!--            android:layout_height="76dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:background="@drawable/image_corner"-->
-<!--            android:clipToOutline="true"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:src="@tools:sample/avatars" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvProductName"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/ivProduct"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:text="Risol Mayo"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textColor="@color/md_theme_onPrimaryContainer"-->
-<!--            android:textStyle="bold"/>-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvProductPrice"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginBottom="24dp"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="italic"-->
-<!--            android:textColor="@color/md_theme_onPrimaryContainer"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/ivProduct"-->
-<!--            tools:text="Rp.40,000" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btnToDetail"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:src="@drawable/baseline_arrow_forward_ios_24"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--            android:id="@+id/btnToDetail"-->
+        <!--            android:layout_width="24dp"-->
+        <!--            android:layout_height="24dp"-->
+        <!--            android:layout_marginEnd="16dp"-->
+        <!--            android:src="@drawable/baseline_arrow_forward_ios_24"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

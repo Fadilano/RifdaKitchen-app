@@ -42,13 +42,14 @@ class CartViewmodel(private val repository: Repository) : ViewModel() {
                 if (success) {
                     // Update the LiveData list by replacing the item with updated quantity
                     val updatedList = _cartItemList.value?.map {
-                        if (it.name == cartModel.name) {
+                        if (it.productId == cartModel.productId) {
                             it.copy(quantity = quantity)
                         } else {
                             it
                         }
                     }
                     _cartItemList.postValue(updatedList)
+                    getTotalPrice() // Refresh total price
                 }
                 _quantityUpdateMessage.postValue(message) // Post the message to show feedback in the UI
             }
@@ -59,8 +60,9 @@ class CartViewmodel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             repository.removeItem(cartModel) { success, message ->
                 if (success) {
-                    val updatedList = _cartItemList.value?.filter { it.name != cartModel.name }
+                    val updatedList = _cartItemList.value?.filter { it.productId != cartModel.productId }
                     _cartItemList.postValue(updatedList)
+                    getTotalPrice() // Refresh total price
                 }
                 _quantityUpdateMessage.postValue(message)
             }

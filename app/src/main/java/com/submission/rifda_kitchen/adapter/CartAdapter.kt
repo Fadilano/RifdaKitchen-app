@@ -3,10 +3,10 @@ package com.submission.rifda_kitchen.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.rifda_kitchen.Helper.formatPrice
-import com.submission.rifda_kitchen.R
 import com.submission.rifda_kitchen.databinding.CartItemListBinding
 import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.viewModel.CartViewmodel
@@ -16,7 +16,6 @@ class CartAdapter(
     private val cartViewmodel: CartViewmodel?
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
-
     inner class CartViewHolder(private val binding: CartItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(cartItem: CartModel) {
@@ -24,14 +23,13 @@ class CartAdapter(
                 tvProductName.text = cartItem.name
                 tvProductPrice.formatPrice(cartItem.price)
                 tvProductQuantity.text = cartItem.quantity.toString()
-                //change load
+
                 Glide.with(ivProduct.context).load(cartItem.image_url).into(ivProduct)
 
                 btnPlus.setOnClickListener {
                     updateQuantity(cartItem, cartItem.quantity + 1)
                 }
 
-                // Handle the minus button click
                 btnMinus.setOnClickListener {
                     if (cartItem.quantity > 1) {
                         updateQuantity(cartItem, cartItem.quantity - 1)
@@ -43,16 +41,12 @@ class CartAdapter(
         }
 
         private fun updateQuantity(cartItem: CartModel, newQuantity: Int) {
-            // Call the view model to update the quantity
             cartViewmodel?.updateItemQuantity(cartItem, newQuantity)
         }
 
         private fun removeItem(cartItem: CartModel) {
-            // Remove item through ViewModel
             cartViewmodel?.removeItem(cartItem)
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -68,7 +62,26 @@ class CartAdapter(
     override fun getItemCount(): Int = cartList.size
 
     fun updateList(newList: List<CartModel>) {
+        val diffCallback = CartDiffCallback(cartList, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         cartList = newList
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 }
+
+class CartDiffCallback(
+    private val oldList: List<CartModel>,
+    private val newList: List<CartModel>
+) : DiffUtil.Callback() {
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].productId == newList[newItemPosition].productId
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
+    }
+}
+

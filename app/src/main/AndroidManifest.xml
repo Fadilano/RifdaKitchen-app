@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
@@ -17,6 +18,15 @@
         android:theme="@style/Theme.RifdaKitchen"
         tools:replace="android:allowBackup"
         tools:targetApi="31">
+        <activity
+            android:name=".admin.view.AdminUserListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.view.AdminEditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".orderValidator.OrderValidatorActivity"
+            android:exported="false" />
         <activity
             android:name=".view.RegisterActivity"
             android:exported="false" />

@@ -157,6 +157,31 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Waktu Pesanan:"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+
+
+                <TextView
+                    android:id="@+id/tvOrdeTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="16dp"
+                    tools:text="04.00 am" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,30 +200,6 @@
                     tools:text="Menunggu konfirmasi" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvPayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:text="Status Pembayaran:"
-                    android:textSize="16sp"
-                    android:textStyle="italic|bold" />
-
-
-                <TextView
-                    android:id="@+id/tvPaymentStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginLeft="16dp"
-                    tools:text="Belum Bayar" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -247,7 +248,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="Bayar"
+            android:text="Copy link payment to Clipboard"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

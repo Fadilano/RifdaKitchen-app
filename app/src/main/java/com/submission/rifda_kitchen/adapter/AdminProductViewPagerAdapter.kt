@@ -6,7 +6,7 @@ import com.submission.rifda_kitchen.admin.view.AdminProductListActivity
 import com.submission.rifda_kitchen.view.MakananBeratFragment
 import com.submission.rifda_kitchen.view.MakananRinganFragment
 
-class AdminViewPagerAdapter(activity: AdminProductListActivity) : FragmentStateAdapter(activity) {
+class AdminProductViewPagerAdapter(activity: AdminProductListActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return 2
     }

@@ -32,10 +32,7 @@
         app:tabIndicatorGravity="stretch"
         app:tabSelectedTextColor="@color/md_theme_primary"
         app:tabTextAppearance="@style/tab_text"
-        app:tabTextColor="@color/md_theme_inversePrimary" /><![CDATA["
-        />
-
-    ]]>
+        app:tabTextColor="@color/md_theme_inversePrimary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -55,6 +52,7 @@
         android:layout_gravity="bottom"
         android:src="@drawable/baseline_add_24"
         android:layout_margin="16dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

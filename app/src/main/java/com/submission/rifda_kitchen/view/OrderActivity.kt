@@ -1,6 +1,7 @@
 package com.submission.rifda_kitchen.view
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.widget.Toast
@@ -20,7 +21,6 @@ import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 class OrderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderBinding
@@ -31,6 +31,7 @@ class OrderActivity : AppCompatActivity() {
 
     private val calendar = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,17 +56,17 @@ class OrderActivity : AppCompatActivity() {
 
         binding.tvTotal.formatPrice(totalPrice)
         setupDatePicker()
+        setupTimePicker()
 
         binding.btnOrder.setOnClickListener {
-
             val custName = binding.custName.text.toString().trim()
             val custAddress = binding.custAddress.text.toString().trim()
             val custPhone = binding.custPhone.text.toString().trim()
             val orderDate = binding.orderDate.text.toString().trim()
+            val orderTime = binding.orderTime.text.toString().trim()
 
-
-            if (custName.isNotEmpty() && custAddress.isNotEmpty() && custPhone.isNotEmpty() && orderDate.isNotEmpty()) {
-
+            if (custName.isNotEmpty() && custAddress.isNotEmpty() &&
+                custPhone.isNotEmpty() && orderDate.isNotEmpty() && orderTime.isNotEmpty()) {
 
                 val order = OrderModel(
                     orderId = "",
@@ -76,6 +77,7 @@ class OrderActivity : AppCompatActivity() {
                     address = custAddress,
                     phone = custPhone,
                     date = orderDate,
+                    time = orderTime,
                     email = custEmail,
                     paymentLink = "",
                     orderStatus = "Menunggu Konfirmasi"
@@ -84,8 +86,6 @@ class OrderActivity : AppCompatActivity() {
                 if (userId != null) {
                     orderViewmodel.updateUserDetails(userId, custPhone, custAddress)
                 }
-
-
             } else {
                 Toast.makeText(this, "Data tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
@@ -94,22 +94,18 @@ class OrderActivity : AppCompatActivity() {
         observeOrderResult()
     }
 
-
     private fun observeOrderResult() {
         orderViewmodel.orderResult.observe(this) { result ->
             val (success, message) = result
             if (success) {
-                // Handle success
                 Toast.makeText(this, "Order saved successfully", Toast.LENGTH_SHORT).show()
                 cartViewmodel.removeAllItems()
                 finish()
             } else {
-                // Handle failure
                 Toast.makeText(this, "Failed to save order: $message", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     private fun displayCartItems(cartItems: List<CartModel>) {
         val adapter = OrderAdapter(cartItems)
@@ -124,6 +120,13 @@ class OrderActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupTimePicker() {
+        val timeInput = binding.orderTime
+        timeInput.setOnClickListener {
+            showTimePicker()
+        }
+    }
+
     private fun showDatePicker() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -133,19 +136,34 @@ class OrderActivity : AppCompatActivity() {
             this,
             { _, selectedYear, selectedMonth, selectedDay ->
                 calendar.set(selectedYear, selectedMonth, selectedDay)
-                binding.orderDate.setText(dateFormat.format(calendar.time)) // Update date input directly
+                binding.orderDate.setText(dateFormat.format(calendar.time))
             },
             year,
             month,
             day
         )
 
-        // Get current date in milliseconds
         val currentDateInMillis = System.currentTimeMillis()
-
-        // Set the minimum date to current date to prevent selecting past dates
         datePicker.datePicker.minDate = currentDateInMillis
-
         datePicker.show()
+    }
+
+    private fun showTimePicker() {
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePicker = TimePickerDialog(
+            this,
+            { _, selectedHour, selectedMinute ->
+                calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+                calendar.set(Calendar.MINUTE, selectedMinute)
+                binding.orderTime.setText(timeFormat.format(calendar.time))
+            },
+            hour,
+            minute,
+            true // 24-hour format
+        )
+
+        timePicker.show()
     }
 }

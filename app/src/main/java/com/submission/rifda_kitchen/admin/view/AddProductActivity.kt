@@ -64,6 +64,7 @@ class AddProductActivity : AppCompatActivity() {
             adminViewModel.saveProductToFirebase(productName, productDescription, productPrice, category, currentImageUri!!, productStock)
         }
 
+
         adminViewModel.imageUploadStatus.observe(this) { status ->
             if (status) {
                 Toast.makeText(this, "Product saved successfully", Toast.LENGTH_SHORT).show()

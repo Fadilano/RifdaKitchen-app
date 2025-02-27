@@ -49,7 +49,6 @@ class HomeFragment : Fragment() {
             binding.tvUsername.text = user?.name
         }
 
-
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Makanan Berat"

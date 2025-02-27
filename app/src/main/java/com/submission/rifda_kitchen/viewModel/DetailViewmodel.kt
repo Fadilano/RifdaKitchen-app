@@ -1,9 +1,11 @@
 package com.submission.rifda_kitchen.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.submission.rifda_kitchen.model.CartModel
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.model.MakananRinganModel
 import com.submission.rifda_kitchen.repository.Repository
@@ -19,6 +21,7 @@ class DetailViewmodel(private val repository: Repository) : ViewModel() {
 
     private val _addToCartSuccess = MutableLiveData<String?>()
     val addToCartSuccess: LiveData<String?> = _addToCartSuccess
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
@@ -28,6 +31,14 @@ class DetailViewmodel(private val repository: Repository) : ViewModel() {
 
     fun setMakananRingan(makananRingan: MakananRinganModel?) {
         _makananRinganLiveData.value = makananRingan
+    }
+
+    fun deleteOrderWithStockUpdate(userId: String, orderId: String, cartItems: List<CartModel>) {
+        repository.deleteOrderWithStockUpdate(userId, orderId, cartItems) { success ->
+            if (!success) {
+                _errorMessage.value = "Failed to delete order and update stock"
+            }
+        }
     }
 
 

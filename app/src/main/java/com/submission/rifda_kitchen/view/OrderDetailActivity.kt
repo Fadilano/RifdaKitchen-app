@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -13,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.rifda_kitchen.Helper.formatPrice
 import com.submission.rifda_kitchen.adapter.OrderAdapter
+import com.submission.rifda_kitchen.admin.repository.AdminRepository
 import com.submission.rifda_kitchen.admin.retrofit.ApiClient
 import com.submission.rifda_kitchen.databinding.ActivityOrderDetailBinding
 import com.submission.rifda_kitchen.model.CartModel
@@ -49,6 +51,7 @@ class OrderDetailActivity : AppCompatActivity() {
         order?.let {
             displayOrderDetails(it)
             displayCartItems(order?.cartItems!!)
+            updateButtonVisibility(order?.orderStatus!!)
         }
 
         setSupportActionBar(binding.toolbar)
@@ -56,8 +59,7 @@ class OrderDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.btnCancel.setOnClickListener {
-            Log.d("OrderDetailActivity", "Cancel button clicked")
-            order?.let { showCancelConfirmationDialog(it) }
+            showCancelConfirmationDialog()
         }
 
         if (order?.orderStatus == "Pesanan dibatalkan") {
@@ -82,14 +84,19 @@ class OrderDetailActivity : AppCompatActivity() {
         binding.tvCustPhone.text = order.phone
         binding.tvCustAddress.text = order.address
         binding.tvOrderDate.text = order.date
+        binding.tvOrdeTime.text = order.time
         binding.tvOrderStatus.text = order.orderStatus
         binding.tvOrderTotal.formatPrice(order.totalPrice)
         if (order.paymentLink != null && order.paymentLink!!.isNotEmpty()) {
             binding.btnBayar.visibility = android.view.View.VISIBLE
             binding.btnBayar.setOnClickListener {
-                // Open the payment link in browser
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(order.paymentLink))
-                startActivity(browserIntent)
+                // Copy the payment link to clipboard
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Payment Link", order.paymentLink)
+                clipboard.setPrimaryClip(clip)
+
+                // Notify the user
+                showToast("Payment link copied to clipboard",)
             }
         } else {
             binding.btnBayar.visibility = android.view.View.GONE
@@ -97,13 +104,13 @@ class OrderDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun showCancelConfirmationDialog(order: OrderModel) {
+    private fun showCancelConfirmationDialog() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Konfirmasi Pembatalan")
-        builder.setMessage("Apakah Anda yakin ingin membatalkan pesanan ini?")
+        builder.setMessage("Apakah Anda yakin ingin membatalkan pesanan ini? Stok produk akan dikembalikan.")
 
         builder.setPositiveButton("Ya") { _, _ ->
-            updateOrderStatus("Pesanan dibatalkan")
+            deleteOrder()
         }
 
         builder.setNegativeButton("Tidak") { dialog, _ ->
@@ -113,13 +120,35 @@ class OrderDetailActivity : AppCompatActivity() {
         builder.create().show()
     }
 
+
+
+    private fun deleteOrder() {
+        order?.let {
+            detailViewmodel.deleteOrderWithStockUpdate(
+                userId ?: "",
+                orderId ?: "",
+                it.cartItems!!
+            )
+            Toast.makeText(this, "Pesanan telah dihapus dan stok diperbarui", Toast.LENGTH_SHORT).show()
+            finish() // Tutup aktivitas setelah penghapusan
+        }
+    }
+
+
     private fun updateOrderStatus(newStatus: String) {
         order?.let {
             detailViewmodel.updateOrderStatus(userId ?: "", orderId ?: "", newStatus)
             binding.tvOrderStatus.text = newStatus
             showToast("Status pesanan diperbarui ke: $newStatus")
+
+            if (newStatus == "Pesanan dibatalkan") {
+                deleteOrder() // Hapus pesanan dari database jika dibatalkan
+            }
         }
     }
+
+
+
 
 
 
@@ -131,6 +160,26 @@ class OrderDetailActivity : AppCompatActivity() {
     }
 
 
+    private fun updateButtonVisibility(orderStatus: String) {
+        when (orderStatus) {
+            "Menunggu Konfirmasi" -> {
+                binding.btnCancel.visibility = View.VISIBLE
+            }
+            "Pesanan Dikonfirmasi, silahkan lakukan pembayaran" -> {
+                binding.btnCancel.visibility = View.VISIBLE
+                binding.btnBayar.visibility = View.VISIBLE
+
+            }
+            "Pesanan Diproses" -> {
+                binding.btnBayar.visibility = View.VISIBLE
+            }
+            else -> {
+                // Default: Hide all buttons if status is not matched
+                binding.btnCancel.visibility = View.GONE
+                binding.btnBayar.visibility = View.GONE
+            }
+        }
+    }
 
 
 }

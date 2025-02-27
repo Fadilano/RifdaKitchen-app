@@ -52,6 +52,7 @@ class MakananRinganFragment : Fragment() {
                 )
             }
             startActivity(intent)
+
         }
         binding.rvProduct.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvProduct.adapter = productAdapter

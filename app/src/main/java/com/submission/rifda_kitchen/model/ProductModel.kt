@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 interface ProductModel {
 
+    val productId: String
     val name: String
     val description: String
     val price: Int
@@ -15,6 +16,7 @@ interface ProductModel {
 
 @Parcelize
 data class MakananBeratModel(
+    override val productId: String = "",
     override val name: String = "",
     override val description: String = "",
     override val price: Int = 0,
@@ -22,11 +24,12 @@ data class MakananBeratModel(
     override val stock: Int = 0 // Tambahkan atribut stock
 ) : ProductModel, Parcelable {
     override val status: String
-        get() = if (stock > 0) "Ready Stock" else "Pre Order"
+        get() = if (stock > 0) "available" else "pre-order"
 }
 
 @Parcelize
 data class MakananRinganModel(
+    override val productId: String = "",
     override val name: String = "",
     override val description: String = "",
     override val price: Int = 0,
@@ -34,5 +37,5 @@ data class MakananRinganModel(
     override val stock: Int = 0 // Tambahkan atribut stock
 ) : ProductModel, Parcelable {
     override val status: String
-        get() = if (stock > 0) "Ready Stock" else "Pre Order"
+        get() = if (stock > 0) "available" else "pre-order"
 }

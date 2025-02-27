@@ -14,6 +14,7 @@ import com.submission.rifda_kitchen.databinding.FragmentMakananBeratBinding
 import com.submission.rifda_kitchen.model.MakananBeratModel
 import com.submission.rifda_kitchen.repository.Repository
 import com.submission.rifda_kitchen.viewModel.ProductViewmodel
+import com.submission.rifda_kitchen.viewModel.UserViewmodel
 import com.submission.rifda_kitchen.viewModel.ViewmodelFactory
 
 
@@ -31,6 +32,7 @@ class MakananBeratFragment : Fragment() {
     ): View? {
         _binding = FragmentMakananBeratBinding.inflate(inflater, container, false)
 
+
         showProducts()
 
         productViewmodel.isLoading.observe(viewLifecycleOwner) {
@@ -42,9 +44,11 @@ class MakananBeratFragment : Fragment() {
     private fun showProducts() {
         productAdapter = ProductAdapter(emptyList()) { product ->
             val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+
                 putExtra("MAKANANBERAT_EXTRA", product as MakananBeratModel)
             }
             startActivity(intent)
+            
         }
 
 
@@ -56,6 +60,7 @@ class MakananBeratFragment : Fragment() {
             productAdapter.updateList(list)
         }
     }
+
 
 
     override fun onDestroyView() {

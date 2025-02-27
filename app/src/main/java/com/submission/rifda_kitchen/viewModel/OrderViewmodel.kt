@@ -17,9 +17,25 @@ class OrderViewmodel(private val repository: Repository) : ViewModel() {
 
     fun saveOrder(order: OrderModel) {
         repository.saveOrder(order) { success, message ->
-            _orderResult.value = Pair(success, message)
+            if (success) {
+                if (!order.cartItems.isNullOrEmpty()) {
+                    repository.reduceStockForOrder(order.cartItems!!) { stockSuccess, stockMessage ->
+                        if (stockSuccess) {
+                            _orderResult.postValue(Pair(true, "Order berhasil dibuat dan stok diperbarui"))
+                        } else {
+                            _orderResult.postValue(Pair(false, "Order berhasil dibuat tetapi $stockMessage"))
+                        }
+                    }
+                } else {
+                    _orderResult.postValue(Pair(true, "Order berhasil dibuat"))
+                }
+            } else {
+                _orderResult.postValue(Pair(false, message))
+            }
         }
     }
+
+
 
     fun updateUserDetails(userId: String, phone: String, address: String) {
         viewModelScope.launch {

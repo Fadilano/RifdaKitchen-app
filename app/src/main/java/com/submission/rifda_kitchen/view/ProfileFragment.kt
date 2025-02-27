@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.submission.rifda_kitchen.BuildConfig
+import com.submission.rifda_kitchen.R
 import com.submission.rifda_kitchen.admin.view.AdminActivity
 import com.submission.rifda_kitchen.databinding.FragmentProfileBinding
+import com.submission.rifda_kitchen.orderValidator.OrderValidatorActivity
 import com.submission.rifda_kitchen.repository.AuthRepository
 import com.submission.rifda_kitchen.repository.Repository
 import com.submission.rifda_kitchen.viewModel.AuthViewmodel
@@ -36,6 +38,7 @@ class ProfileFragment : Fragment() {
 
         showCurrentUser()
         showAdminButton()
+        showOrderValidatorButton()
 
         binding.btnSignOut.setOnClickListener {
             signOut()
@@ -44,6 +47,11 @@ class ProfileFragment : Fragment() {
 
         binding.btnAdminPanel.setOnClickListener {
             val intent = Intent(requireContext(), AdminActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnOrvaPanel.setOnClickListener {
+            val intent = Intent(requireContext(), OrderValidatorActivity::class.java)
             startActivity(intent)
         }
 
@@ -56,10 +64,27 @@ class ProfileFragment : Fragment() {
     }
 
     private fun signOut() {
-        authViewmodel.signOUt(requireContext())
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
-        activity?.finish()
+
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Konfirmasi Logout")
+        builder.setMessage("Apakah Anda yakin ingin keluar?")
+
+        builder.setPositiveButton("Ya") { _, _ ->
+
+            authViewmodel.signOUt(requireContext())
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+
+        builder.setNegativeButton("Tidak") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
     }
+
 
     private fun showCurrentUser() {
         userViewmodel.currentUser.observe(viewLifecycleOwner) { user ->
@@ -69,7 +94,14 @@ class ProfileFragment : Fragment() {
                     currentUserEmail.text = user.email
                 }
                 Glide.with(this)
-                    .load(user.photo_url)
+                    .load(if(user.photo_url == "Unknown Photo Url"){
+                        R.drawable.default_user
+                    } else {
+                        user.photo_url
+                    }
+                    )
+
+
                     .into(binding.currentUserImage)
             }
         }
@@ -77,11 +109,21 @@ class ProfileFragment : Fragment() {
 
     private fun showAdminButton() {
         userViewmodel.currentUser.observe(viewLifecycleOwner) { user ->
-            if (BuildConfig.ADMIN_KEY == user?.uid) {
+            if (user?.role == "Admin") {
                 binding.btnAdminPanel.visibility = View.VISIBLE
             } else {
                 binding.btnAdminPanel.visibility = View.GONE
             }
         }
     }
+
+    private fun showOrderValidatorButton() {
+        userViewmodel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (user?.role == "Order Validator") {
+                binding.btnOrvaPanel.visibility = View.VISIBLE
+            } else {
+                binding.btnOrvaPanel.visibility = View.GONE
+            }
+    }
+}
 }
